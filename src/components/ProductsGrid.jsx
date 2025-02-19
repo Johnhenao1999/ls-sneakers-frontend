@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import '../css/ProductsGrid.css';
+import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all' }) {
   const [products, setProducts] = useState([]);

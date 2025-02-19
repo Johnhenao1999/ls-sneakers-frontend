@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import '../css/DescriptionProduct.css';
+import '../css/descriptionProduct.css';
 
 function DescriptionProduct() {
     const location = useLocation();
