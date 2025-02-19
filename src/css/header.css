@@ -1,0 +1,110 @@
+/* Sticky Navbar */
+.navbar {
+    position: sticky; /* Mantiene el header fijo al hacer scroll */
+    top: 0; /* Fijo en la parte superior */
+    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Transición suave para efectos */
+}
+
+/* Navbar Content */
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1120px;
+    margin: 0 auto;
+    transition: padding 0.3s ease; /* Transición al cambiar tamaños */
+}
+
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: font-size 0.3s ease; /* Transición al cambiar tamaños */
+}
+
+/* Navigation Links */
+.navbar nav a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.navbar nav a:hover {
+    color: #ff5a3c; /* Color de hover profesional */
+}
+
+/* Call-to-Action Button */
+.navbar .actions .primary-button {
+    text-decoration: none;
+    background-color: #ff5a3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .actions .primary-button:hover {
+    background-color: #e04931;
+    transform: scale(1.05); /* Efecto de agrandamiento */
+}
+
+.menu-toggle {
+    display: none; /* Oculta el ícono del menú por defecto */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar-content {
+        align-items: center;
+        padding: 1rem;
+        justify-content: space-between;
+    }
+
+    .navbar nav {
+        display: none; /* Oculta el menú por defecto */
+        flex-direction: column; /* Cuando se muestre, será una columna */
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+    .navbar nav.show {
+        display: flex; /* Muestra el menú al activarse */
+    }
+
+    .navbar nav a {
+        margin: 0.5rem 0;
+        font-size: 1.2rem;
+        width: 100%;
+        text-align: left;
+    }
+
+    .navbar .logo {
+        font-size: 1.2rem; /* Reduce el tamaño del logo */
+    }
+
+    .navbar .menu-toggle {
+        display: flex; /* Muestra el ícono del menú */
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #333;
+        background: none;
+        border: none;
+    }
+}

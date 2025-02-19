@@ -1,0 +1,120 @@
+.description-product {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: #f8f8f8;
+}
+
+.product-details {
+    display: flex;
+    flex-wrap: nowrap; /* Asegura que los elementos no se apilen */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.product-image {
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-right: 1px solid #e0e0e0; /* Línea divisoria entre imagen e información */
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-info {
+    flex: 1 1 50%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra verticalmente el contenido */
+    gap: 1rem;
+}
+
+.product-info h1 {
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    color: #ff5a3c;
+    font-weight: bold;
+}
+
+.product-description {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.product-sizes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-sizes label {
+    font-weight: bold;
+    color: #333;
+}
+
+.product-sizes select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.selected-size {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.add-to-cart {
+    padding: 0.8rem 1.5rem;
+    background-color: #ff5a3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start; /* Alinea el botón a la izquierda */
+}
+
+.add-to-cart:hover {
+    background-color: #e04d34;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-details {
+        flex-wrap: wrap; /* Permite que los elementos se apilen en pantallas pequeñas */
+    }
+
+    .product-image,
+    .product-info {
+        flex: 1 1 100%;
+        border-right: none; /* Elimina la línea divisoria en móviles */
+    }
+
+    .product-info {
+        padding: 1.5rem;
+    }
+
+    .add-to-cart {
+        align-self: center; /* Centra el botón en pantallas pequeñas */
+    }
+}

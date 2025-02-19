@@ -1,0 +1,82 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas, cada una con el mismo tamaño */
+    gap: 1.5rem; /* Espaciado entre los productos */
+    justify-items: center; /* Centra los items en la celda de la grid */
+    margin-top: 30px;
+}
+
+.product-card {
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    max-width: 250px;
+    min-width: 200px;
+}
+
+.product-card-inner {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.product-card-inner.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-card:hover {
+    transform: translateY(-10px) scale(1.05); /* Elevación y aumento de tamaño */
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease; /* Suaviza la animación de la imagen */
+}
+
+.product-card:hover img {
+    transform: scale(1.0); /* Zoom de la imagen */
+}
+
+.product-card h3 {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    color: #333;
+    transition: color 0.3s ease; /* Suaviza el cambio de color */
+}
+
+.product-card:hover h3 {
+    color: #ff5a3c; /* Cambia el color del texto en hover */
+}
+
+.product-price {
+    color: #ff5a3c;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: color 0.3s ease; /* Suaviza el cambio de color */
+}
+
+.product-card:hover .product-price {
+    color: #e04931; /* Cambia a un tono más oscuro en hover */
+}
+
+@media (max-width: 1200px) {
+
+    .product-card {
+        max-width: initial;
+        min-width: initial;
+    }
+
+    .grid-container {
+        padding: 16px;
+        grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas medianas */
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas más pequeñas */
+    }
+}
