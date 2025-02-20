@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../css/AdminPanel.css";
+import "../AdminPanel.css";
 
 const AddProducts = () => {
   const preset_name = 'lsneakersuploadassets'; // Upload preset de Cloudinary
