@@ -4,14 +4,14 @@ import HomePage from "./pages/Home";
 import ProductsGentlemen from "./pages/ProductsGentlemen";
 import PageDescriptionProduct from "./pages/PageDescriptionProduct";
 import ProductsLadies from "./pages/ProductsLadies";
-import AddProducts from "./pages/AdminPanel";
+import AdminPanel from "./pages/AdminPanel";
 
 function App() { 
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/add-products" element={<AddProducts />} />
+                <Route path="/add-products" element={<AdminPanel />} />
                 <Route path="/collections/caballeros" element={<ProductsGentlemen />} />
                 <Route path="/collections/damas" element={<ProductsLadies />} />
                 {/* Ruta dinámica para descripción */}
