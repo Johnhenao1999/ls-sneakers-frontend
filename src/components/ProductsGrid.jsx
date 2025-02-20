@@ -12,7 +12,7 @@ function ProductsGrid({ category = 'all' }) {
     // Función para obtener los datos de la API
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products');
         if (!response.ok) {
           throw new Error('Error al obtener los productos');
         }
