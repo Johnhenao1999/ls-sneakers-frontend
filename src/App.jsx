@@ -11,7 +11,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/add-products" element={<AdminPanel />} />
+                <Route path="/add" element={<AdminPanel />} />
                 <Route path="/collections/caballeros" element={<ProductsGentlemen />} />
                 <Route path="/collections/damas" element={<ProductsLadies />} />
                 {/* Ruta dinámica para descripción */}
