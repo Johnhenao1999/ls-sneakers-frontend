@@ -17,7 +17,7 @@ function ProductsGrid({ category = 'all', selectedBrand }) {
         const data = await response.json();
         console.log(data);
         const filteredData = data.filter(product =>
-          (category === "promotion" ? product.onSale === true : true) &&
+          (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
           (category === "caballeros" ? product.gender === "Hombre" :
             category === "mujer" ? product.gender === "Mujer" :
               true)
@@ -72,10 +72,23 @@ function ProductInView({ product }) {
     minimumFractionDigits: 0,
   }).format(product.price);
 
+  const formattedDiscountPrice = product.discountPrice
+    ? new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(product.discountPrice)
+    : null;
+
   return (
     <div ref={ref} className={`product-card-inner ${inView ? 'visible' : ''}`}>
       <img src={product.imageUrl} alt={product.name} />
-      <p className="product-price">{formattedPrice}</p>
+      {product.onSale && formattedDiscountPrice ? (
+        <p className="product-discount-price">{formattedDiscountPrice}</p>
+      ) : null}
+      <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
+        {formattedPrice}
+      </p>
       <h3>{product.name}</h3>
       <h3>{product.gender}</h3>
     </div>

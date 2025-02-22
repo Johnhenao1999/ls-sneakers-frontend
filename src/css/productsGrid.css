@@ -54,12 +54,24 @@
 }
 
 .product-price {
+    font-size: 1.5rem;
     color: #ff5a3c;
-    font-size: 1.1rem;
     font-weight: bold;
-    transition: color 0.3s ease; /* Suaviza el cambio de color */
     margin: 0;
 }
+
+.product-discount-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff5a3c;
+    margin: 0;
+  }
+  
+  .price-strikethrough {
+    text-decoration: line-through;
+    color: gray !important;
+    font-size: 1.1rem !important;
+  }
 
 @media (max-width: 1200px) {
 
