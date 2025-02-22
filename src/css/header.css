@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 8px;
     max-width: 1120px;
     margin: 0 auto;
     transition: padding 0.3s ease; /* Transición al cambiar tamaños */
@@ -28,6 +28,12 @@
     letter-spacing: 1px;
     transition: font-size 0.3s ease; /* Transición al cambiar tamaños */
     text-decoration: none;
+    height: 60px;
+}
+
+.logo img{
+    width: 60px;
+    height: 60px;
 }
 
 /* Navigation Links */
@@ -46,14 +52,9 @@
 }
 
 /* Call-to-Action Button */
-.navbar .actions .primary-button {
-    text-decoration: none;
-    background-color: #01627D ;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: 700;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+.actions img{
+    width: 60px;
+    height: 60px;
 }
 
 .navbar .actions .primary-button:hover {
@@ -82,7 +83,7 @@
 
     .navbar-content {
         align-items: center;
-        padding: 1rem;
+        padding: 8px;
         justify-content: space-between;
     }
 

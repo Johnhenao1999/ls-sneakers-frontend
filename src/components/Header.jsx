@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../css/header.css';
 import { Link } from "react-router-dom";
+import logo from "../assets/logo-lsneackers.jpg";
+import prueba from "../assets/apoyo.gif";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,19 +18,20 @@ function Header() {
           {isMenuOpen ? '✖' : '☰'}
         </button>
         <Link to="/" className="logo">
-          <span role="img" aria-label="sneaker">👟</span> LSNEAKERS
+         <img src={logo} alt="" />
         </Link>
         {/* Navigation Menu */}
         <nav className={isMenuOpen ? "show" : ""}>
           <Link to="/">INICIO</Link>
           <Link to="/collections/damas"><span class="icon-mujer">👩🏻</span>MUJER</Link>
           <Link to="/collections/caballeros"><span class="icon-hombre">👱🏻‍♂️</span>HOMBRE</Link>
+          <Link to="/collections/caballeros"><span class="icon-hombre">👱🏻‍♂️</span>PROMOCIONES</Link>
         </nav>
 
         {/* Call-to-Action Button */}
-        <div className="actions">
-          <a href="#contactenos" className="primary-button">Contáctenos</a>
-        </div>
+        <Link to="/" className="actions">
+          <img src={prueba} alt="" />
+        </Link>
       </div>
     </header>
   );
