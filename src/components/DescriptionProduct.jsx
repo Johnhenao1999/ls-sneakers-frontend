@@ -25,6 +25,12 @@ function DescriptionProduct() {
         window.open(whatsappURL, '_blank');
     };
 
+    const formattedPrice = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+      }).format(product.price);
+
     return (
         <div className="description-product">
             <div className="product-details">
@@ -33,7 +39,7 @@ function DescriptionProduct() {
                 </div>
                 <div className="product-info">
                     <h1>{product.name}</h1>
-                    <p className="product-price">{product.price}</p>
+                    <p className="product-price">{formattedPrice}</p>
                     <div className="product-sizes">
                         <label htmlFor="size-select">Tallas disponibles:</label>
                         <select

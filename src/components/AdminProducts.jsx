@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BRANDS } from '../constans.js';
 import "../css/adminpanel.css";
 
 const AddProducts = () => {
@@ -123,21 +124,16 @@ const AddProducts = () => {
             type="number"
             name="price"
             value={formData.price}
-            onChange={handleInputChange} 
+            onChange={handleInputChange}
             required
           />
         </div>
 
         <div className="form-group">
           <label>Categoría:</label>
-          <select
-            name="branch"
-            value={formData.branch}
-            onChange={handleInputChange}
-            required
-          >
+          <select name="branch" value={formData.branch} onChange={handleInputChange} required>
             <option value="">Seleccione una categoría</option>
-            {categories.map((branch) => (
+            {BRANDS.map((branch) => (
               <option key={branch} value={branch}>
                 {branch}
               </option>
@@ -183,9 +179,9 @@ const AddProducts = () => {
           <label>Imagen del producto:</label>
           <input type="file" name="file" onChange={uploadImage} required />
           {loading ? (
-             <div className="loader"></div> // Loader animado
+            <div className="loader"></div> // Loader animado
           ) : (
-            image &&  <p>Imagen subida exitosamente.</p>
+            image && <p>Imagen subida exitosamente.</p>
           )}
         </div>
 

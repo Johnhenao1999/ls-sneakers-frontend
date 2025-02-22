@@ -11,20 +11,6 @@ function HomePage() {
       <Header />
       <BannerHero />
       <ProductsGrid category="all" />
-      <footer className="stats">
-        <div>
-          <h2>50K</h2>
-          <p>Modelos Inspiradores</p>
-        </div>
-        <div>
-          <h2>10K+</h2>
-          <p>Colecciones Exclusivas</p>
-        </div>
-        <div>
-          <h2>500+</h2>
-          <p>Marcas Creativas</p>
-        </div>
-      </footer>
     </div>
   );
 }

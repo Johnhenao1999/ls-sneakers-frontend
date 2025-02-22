@@ -37,25 +37,27 @@
     color: #333;
     font-size: 1rem;
     transition: color 0.3s ease, font-size 0.3s ease;
+    font-weight: 700;
 }
 
 .navbar nav a:hover {
-    color: #ff5a3c; /* Color de hover profesional */
+    color: #01627D; /* Color de hover profesional */
+    font-weight: 700;
 }
 
 /* Call-to-Action Button */
 .navbar .actions .primary-button {
     text-decoration: none;
-    background-color: #ff5a3c;
+    background-color: #01627D ;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 5px;
-    font-weight: bold;
+    font-weight: 700;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .actions .primary-button:hover {
-    background-color: #e04931;
+    background-color: #0f3b48 ;
     transform: scale(1.05); /* Efecto de agrandamiento */
 }
 

@@ -3,26 +3,25 @@ import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import '../css/productsGrid.css';
 
-function ProductsGrid({ category = 'all' }) {
+function ProductsGrid({ category = 'all', selectedBrand }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Función para obtener los datos de la API
     const fetchProducts = async () => {
       try {
         const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products');
-        if (!response.ok) {
-          throw new Error('Error al obtener los productos');
-        }
+        if (!response.ok) throw new Error('Error al obtener los productos');
+        
         const data = await response.json();
-        const filteredProducts = category === "caballeros"
-        ? data.filter(product => product.gender === "Hombre")
-        : category === "damas"
-        ? data.filter(product => product.gender === "Mujer")
-        : data;
-        setProducts(filteredProducts);
+        const filteredData = category === "caballeros"
+          ? data.filter(product => product.gender === "Hombre")
+          : category === "damas"
+            ? data.filter(product => product.gender === "Mujer")
+            : data;
+        
+        setProducts(filteredData);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -33,25 +32,19 @@ function ProductsGrid({ category = 'all' }) {
     fetchProducts();
   }, []);
 
-  const toSlug = (name) =>
-    name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '-');
+  const filteredProducts = selectedBrand
+    ? products.filter(product => product.branch === selectedBrand)
+    : products;
 
-  if (loading) {
-    return <p>Cargando productos...</p>;
-  }
+  const toSlug = (name) => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Cargando productos...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <section className="product-grid">
       <div className="grid-container">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Link
             key={product._id}
             to={`/collections/${category}/${toSlug(product.name)}`}
@@ -69,22 +62,16 @@ function ProductsGrid({ category = 'all' }) {
 }
 
 function ProductInView({ product }) {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.5,
-  });
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
 
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
-    minimumFractionDigits: 0, // Sin decimales
+    minimumFractionDigits: 0,
   }).format(product.price);
 
   return (
-    <div
-      ref={ref}
-      className={`product-card-inner ${inView ? 'visible' : ''}`}
-    >
+    <div ref={ref} className={`product-card-inner ${inView ? 'visible' : ''}`}>
       <img src={product.imageUrl} alt={product.name} />
       <p className="product-price">{formattedPrice}</p>
       <h3>{product.name}</h3>

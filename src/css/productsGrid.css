@@ -3,7 +3,9 @@
     grid-template-columns: repeat(4, 1fr); /* 4 columnas, cada una con el mismo tamaño */
     gap: 1.5rem; /* Espaciado entre los productos */
     justify-items: center; /* Centra los items en la celda de la grid */
+    margin: 0 auto;
     margin-top: 30px;
+    max-width: 1120px;
 }
 
 .product-card {
