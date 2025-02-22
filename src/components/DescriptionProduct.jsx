@@ -29,7 +29,15 @@ function DescriptionProduct() {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0,
-      }).format(product.price);
+    }).format(product.price);
+
+    const formattedDiscountPrice = product.discountPrice
+        ? new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0,
+        }).format(product.discountPrice)
+        : null;
 
     return (
         <div className="description-product">
@@ -39,7 +47,12 @@ function DescriptionProduct() {
                 </div>
                 <div className="product-info">
                     <h1>{product.name}</h1>
-                    <p className="product-price">{formattedPrice}</p>
+                    {product.onSale && formattedDiscountPrice ? (
+                        <p className="product-discount-price">{formattedDiscountPrice}</p>
+                    ) : null}
+                    <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
+                        {formattedPrice}
+                    </p>
                     <div className="product-sizes">
                         <label htmlFor="size-select">Tallas disponibles:</label>
                         <select

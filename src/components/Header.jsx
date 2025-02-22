@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../css/header.css';
 import { Link } from "react-router-dom";
 import logo from "../assets/logo-lsneackers.jpg";
-import prueba from "../assets/apoyo.gif";
+import contact from "../assets/apoyo.gif";
 import iconHombre from "../assets/hombre.png";
 import iconMujer from "../assets/mujer.png";
 import promotion from "../assets/etiqueta-de-descuento.png";
@@ -32,10 +32,12 @@ function Header() {
           <Link to="/collections/promociones"><img className='icons-menu' src={promotion} alt="" />PROMOCIONES</Link>
         </nav>
 
-        {/* Call-to-Action Button */}
-        <Link to="/" className="actions">
-          <img src={prueba} alt="" />
-        </Link>
+        {/* Call-to-Action Button - Hidden when menu is open */}
+        {!isMenuOpen && (
+          <Link to="/" className="actions">
+            <img src={contact} alt="" />
+          </Link>
+        )}
       </div>
     </header>
   );

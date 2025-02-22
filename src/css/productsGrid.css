@@ -73,16 +73,20 @@
     font-size: 1.1rem !important;
   }
 
-@media (max-width: 1200px) {
+@media (max-width: 1120px) {
 
     .product-card {
         max-width: initial;
         min-width: initial;
     }
 
+    .product-card:hover {
+        transform: none;
+    }
+
     .grid-container {
         padding: 16px;
-        grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas medianas */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
