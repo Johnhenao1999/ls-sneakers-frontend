@@ -27,6 +27,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: font-size 0.3s ease; /* Transición al cambiar tamaños */
+    text-decoration: none;
 }
 
 /* Navigation Links */
@@ -62,11 +63,19 @@
     display: none; /* Oculta el ícono del menú por defecto */
 }
 
+.icon-mujer, .icon-hombre{
+    display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
 
     .menu-toggle {
         display: block;
+    }
+
+    .active{
+        padding: 16px;
     }
 
     .navbar-content {
@@ -80,12 +89,11 @@
         flex-direction: column; /* Cuando se muestre, será una columna */
         width: 100%;
         background-color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
     }
 
     .navbar nav.show {
         display: flex; /* Muestra el menú al activarse */
+        height: 100vh;
     }
 
     .navbar nav a {
@@ -93,10 +101,14 @@
         font-size: 1.2rem;
         width: 100%;
         text-align: left;
+        display: flex;
+        align-items: center;
     }
 
     .navbar .logo {
         font-size: 1.2rem; /* Reduce el tamaño del logo */
+        display: flex;
+        justify-content: center;
     }
 
     .navbar .menu-toggle {
@@ -107,4 +119,18 @@
         background: none;
         border: none;
     }
+
+    .menu-toggle-active{
+        position: absolute;
+        right: 0;
+        font-size: 1.5rem;
+        color: #333;
+        background: none;
+        border: none;
+    }
+
+    .icon-mujer, .icon-hombre{
+        display: block;
+    }
+
 }

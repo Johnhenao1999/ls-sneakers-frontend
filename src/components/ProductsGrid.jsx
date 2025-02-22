@@ -17,7 +17,12 @@ function ProductsGrid({ category = 'all' }) {
           throw new Error('Error al obtener los productos');
         }
         const data = await response.json();
-        setProducts(data);
+        const filteredProducts = category === "caballeros"
+        ? data.filter(product => product.gender === "Hombre")
+        : category === "damas"
+        ? data.filter(product => product.gender === "Mujer")
+        : data;
+        setProducts(filteredProducts);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -69,17 +74,21 @@ function ProductInView({ product }) {
     threshold: 0.5,
   });
 
+  const formattedPrice = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0, // Sin decimales
+  }).format(product.price);
+
   return (
     <div
       ref={ref}
       className={`product-card-inner ${inView ? 'visible' : ''}`}
     >
       <img src={product.imageUrl} alt={product.name} />
+      <p className="product-price">{formattedPrice}</p>
       <h3>{product.name}</h3>
-      <p className="product-price">${product.price}</p>
-      <p className="product-sizes">
-        Tallas: {product.sizes.join(', ')}
-      </p>
+      <h3>{product.gender}</h3>
     </div>
   );
 }

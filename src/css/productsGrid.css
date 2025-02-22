@@ -8,7 +8,7 @@
 
 .product-card {
     border-radius: 8px;
-    text-align: center;
+    text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     max-width: 250px;
     min-width: 200px;
@@ -40,6 +40,10 @@
     transform: scale(1.0); /* Zoom de la imagen */
 }
 
+.product-card-link {
+    text-decoration: none;
+}	
+
 .product-card h3 {
     margin: 0.5rem 0;
     font-size: 1.2rem;
@@ -47,19 +51,12 @@
     transition: color 0.3s ease; /* Suaviza el cambio de color */
 }
 
-.product-card:hover h3 {
-    color: #ff5a3c; /* Cambia el color del texto en hover */
-}
-
 .product-price {
     color: #ff5a3c;
     font-size: 1.1rem;
     font-weight: bold;
     transition: color 0.3s ease; /* Suaviza el cambio de color */
-}
-
-.product-card:hover .product-price {
-    color: #e04931; /* Cambia a un tono más oscuro en hover */
+    margin: 0;
 }
 
 @media (max-width: 1200px) {

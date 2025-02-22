@@ -11,7 +11,8 @@ const AddProducts = () => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    category: '',
+    branch: '',
+    gender: '',
     sizes: [],
     gender: '', // Nuevo campo para Hombre, Mujer o Unisex
   });
@@ -72,7 +73,7 @@ const AddProducts = () => {
     }
 
     const payload = { ...formData, imageUrl: image };
-
+    console.log('Datos a enviar:', payload);
     try {
       const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products', {
         method: 'POST',
@@ -85,7 +86,8 @@ const AddProducts = () => {
         setFormData({
           name: '',
           price: '',
-          category: '',
+          branch: '',
+          gender: '',
           sizes: [],
           gender: '',
         });
@@ -121,7 +123,7 @@ const AddProducts = () => {
             type="number"
             name="price"
             value={formData.price}
-            onChange={handleInputChange}
+            onChange={handleInputChange} 
             required
           />
         </div>
@@ -129,15 +131,15 @@ const AddProducts = () => {
         <div className="form-group">
           <label>Categoría:</label>
           <select
-            name="category"
-            value={formData.category}
+            name="branch"
+            value={formData.branch}
             onChange={handleInputChange}
             required
           >
             <option value="">Seleccione una categoría</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {categories.map((branch) => (
+              <option key={branch} value={branch}>
+                {branch}
               </option>
             ))}
           </select>
@@ -181,9 +183,9 @@ const AddProducts = () => {
           <label>Imagen del producto:</label>
           <input type="file" name="file" onChange={uploadImage} required />
           {loading ? (
-            <p>Subiendo imagen...</p>
+             <div className="loader"></div> // Loader animado
           ) : (
-            image && <img src={image} alt="Producto" className="preview-image" />
+            image &&  <p>Imagen subida exitosamente.</p>
           )}
         </div>
 

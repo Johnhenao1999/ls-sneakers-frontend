@@ -11,19 +11,18 @@ function Header() {
 
   return (
     <header className="navbar">
-      <div className="navbar-content">
-        <button className="menu-toggle" onClick={toggleMenu}>
-          ☰
+      <div className={isMenuOpen ? "active" : "navbar-content"}>
+        <button className={isMenuOpen ? "menu-toggle-active" : "menu-toggle"} onClick={toggleMenu}>
+          {isMenuOpen ? '✖' : '☰'}
         </button>
-        <div className="logo">
+        <Link to="/" className="logo">
           <span role="img" aria-label="sneaker">👟</span> LSNEAKERS
-        </div>
-
+        </Link>
         {/* Navigation Menu */}
         <nav className={isMenuOpen ? "show" : ""}>
           <Link to="/">INICIO</Link>
-          <Link to="/collections/damas">DAMAS</Link>
-          <Link to="/collections/caballeros">CABALLEROS</Link>
+          <Link to="/collections/damas"><span class="icon-mujer">👱🏻‍♂️</span>MUJER</Link>
+          <Link to="/collections/caballeros"><span class="icon-hombre">👱🏻‍♂️</span>HOMBRE</Link>
         </nav>
 
         {/* Call-to-Action Button */}

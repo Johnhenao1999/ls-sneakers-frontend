@@ -75,6 +75,7 @@
   .fade-in {
     animation: fadeInUp 1s ease-out forwards;
     opacity: 0;
+    color: white;
   }
   
   .delay-1 {
