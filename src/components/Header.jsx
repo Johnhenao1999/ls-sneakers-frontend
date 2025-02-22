@@ -21,7 +21,7 @@ function Header() {
         {/* Navigation Menu */}
         <nav className={isMenuOpen ? "show" : ""}>
           <Link to="/">INICIO</Link>
-          <Link to="/collections/damas"><span class="icon-mujer">👱🏻‍♂️</span>MUJER</Link>
+          <Link to="/collections/damas"><span class="icon-mujer">👩🏻</span>MUJER</Link>
           <Link to="/collections/caballeros"><span class="icon-hombre">👱🏻‍♂️</span>HOMBRE</Link>
         </nav>
 
