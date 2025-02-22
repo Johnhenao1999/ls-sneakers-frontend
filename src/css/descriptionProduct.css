@@ -37,14 +37,16 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centra verticalmente el contenido */
+    justify-content: center;
     gap: 1rem;
+    align-items: start;
 }
 
 .product-info h1 {
     font-size: 2rem;
     color: #333;
     margin: 0;
+    text-align: left;
 }
 
 .product-price {

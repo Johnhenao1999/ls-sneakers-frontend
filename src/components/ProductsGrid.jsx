@@ -13,14 +13,16 @@ function ProductsGrid({ category = 'all', selectedBrand }) {
       try {
         const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products');
         if (!response.ok) throw new Error('Error al obtener los productos');
-        
+
         const data = await response.json();
-        const filteredData = category === "caballeros"
-          ? data.filter(product => product.gender === "Hombre")
-          : category === "damas"
-            ? data.filter(product => product.gender === "Mujer")
-            : data;
-        
+        console.log(data);
+        const filteredData = data.filter(product =>
+          (category === "promotion" ? product.onSale === true : true) &&
+          (category === "caballeros" ? product.gender === "Hombre" :
+            category === "mujer" ? product.gender === "Mujer" :
+              true)
+        );
+
         setProducts(filteredData);
         setLoading(false);
       } catch (error) {

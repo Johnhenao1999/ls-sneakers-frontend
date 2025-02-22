@@ -3,8 +3,8 @@ import { BRANDS } from '../constans.js';
 import "../css/adminpanel.css";
 
 const AddProducts = () => {
-  const preset_name = 'lsneakersuploadassets'; // Upload preset de Cloudinary
-  const cloud_name = 'dj2v5y8li'; // Nombre del cloud_name en Cloudinary
+  const preset_name = 'lsneakersuploadassets';
+  const cloud_name = 'dj2v5y8li';
 
   const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,37 +12,54 @@ const AddProducts = () => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
+    discountPrice: '',
     branch: '',
     gender: '',
     sizes: [],
-    gender: '', // Nuevo campo para Hombre, Mujer o Unisex
+    onSale: false,
   });
 
-  const categories = ['Adidas', 'Nike', 'Puma', 'Armani', 'New Balance']; // Opciones de categorías
-  const availableSizes = ['36 MUJER', '37 MUJER', '38 MUJER', '36 HOMBRE', '37 HOMBRE', '38 HOMBRE']; // Opciones de tallas
-  const genders = ['Hombre', 'Mujer', 'Unisex']; // Opciones para género
+  const sizesByGender = {
+    Hombre: ['36 HOMBRE', '37 HOMBRE', '38 HOMBRE'],
+    Mujer: ['36 MUJER', '37 MUJER', '38 MUJER'],
+    Unisex: ['36 MUJER', '37 MUJER', '38 MUJER', '36 HOMBRE', '37 HOMBRE', '38 HOMBRE'],
+  };
 
-  // Handler para actualizar los inputs del formulario
+  const genders = ['Hombre', 'Mujer', 'Unisex'];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+      sizes: name === 'gender' ? [] : prev.sizes,
     }));
   };
 
-  // Handler para actualizar las tallas seleccionadas
   const handleSizeChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      sizes: checked
-        ? [...prev.sizes, value] // Agregar talla seleccionada
-        : prev.sizes.filter((size) => size !== value), // Remover talla deseleccionada
+      sizes: checked ? [...prev.sizes, value] : prev.sizes.filter((size) => size !== value),
     }));
   };
 
-  // Subir imagen a Cloudinary
+  const handleSelectAllSizes = (e) => {
+    const checked = e.target.checked;
+    setFormData((prev) => ({
+      ...prev,
+      sizes: checked ? sizesByGender[formData.gender] || [] : [],
+    }));
+  };
+
+  const handleCheckboxChange = () => {
+    setFormData((prev) => ({
+      ...prev,
+      onSale: !prev.onSale,
+      discountPrice: prev.onSale ? '' : prev.discountPrice,
+    }));
+  };
+
   const uploadImage = async (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -51,10 +68,10 @@ const AddProducts = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        { method: 'POST', body: data }
-      );
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+        method: 'POST',
+        body: data,
+      });
       const file = await response.json();
       setImage(file.secure_url);
       setLoading(false);
@@ -64,7 +81,6 @@ const AddProducts = () => {
     }
   };
 
-  // Enviar datos del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,14 +99,15 @@ const AddProducts = () => {
       });
 
       if (response.ok) {
-        setShowModal(true); // Mostrar modal de confirmación
+        setShowModal(true);
         setFormData({
           name: '',
           price: '',
+          discountPrice: '',
           branch: '',
           gender: '',
           sizes: [],
-          gender: '',
+          onSale: false,
         });
         setImage('');
       } else {
@@ -119,17 +136,6 @@ const AddProducts = () => {
         </div>
 
         <div className="form-group">
-          <label>Precio:</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
           <label>Categoría:</label>
           <select name="branch" value={formData.branch} onChange={handleInputChange} required>
             <option value="">Seleccione una categoría</option>
@@ -142,38 +148,57 @@ const AddProducts = () => {
         </div>
 
         <div className="form-group">
-          <label>Género:</label>
-          <select
-            name="gender"
-            value={formData.gender}
+          <label>Precio:</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
             onChange={handleInputChange}
             required
-          >
+          />
+        </div>
+
+        <div className="form-group">
+          <label>¿En promoción?</label>
+          <label className="switch">
+            <input type="checkbox" checked={formData.onSale} onChange={handleCheckboxChange} />
+            <span className="slider round"></span>
+          </label>
+        </div>
+
+        {formData.onSale && (
+          <div className="form-group">
+            <label>Precio con descuento:</label>
+            <input type="number" name="discountPrice" value={formData.discountPrice} onChange={handleInputChange} required={formData.onSale} />
+          </div>
+        )}
+
+        <div className="form-group">
+          <label>Género:</label>
+          <select name="gender" value={formData.gender} onChange={handleInputChange} required>
             <option value="">Seleccione el género</option>
             {genders.map((gender) => (
-              <option key={gender} value={gender}>
-                {gender}
-              </option>
+              <option key={gender} value={gender}>{gender}</option>
             ))}
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Tallas disponibles:</label>
-          <div className="checkbox-group">
-            {availableSizes.map((size) => (
-              <label key={size}>
-                <input
-                  type="checkbox"
-                  value={size}
-                  checked={formData.sizes.includes(size)}
-                  onChange={handleSizeChange}
-                />
-                {size}
-              </label>
-            ))}
+        {formData.gender && (
+          <div className="form-group">
+            <label>Tallas disponibles:</label>
+            <div className="checkbox-group">
+              {sizesByGender[formData.gender].map((size) => (
+                <label key={size}>
+                  <input type="checkbox" value={size} checked={formData.sizes.includes(size)} onChange={handleSizeChange} />
+                  {size}
+                </label>
+              ))}
+            </div>
+            <label>
+              <input type="checkbox" onChange={handleSelectAllSizes} /> Seleccionar todas
+            </label>
           </div>
-        </div>
+        )}
 
         <div className="form-group">
           <label>Imagen del producto:</label>

@@ -5,6 +5,7 @@ import ProductsGentlemen from "./pages/ProductsGentlemen";
 import PageDescriptionProduct from "./pages/PageDescriptionProduct";
 import ProductsLadies from "./pages/ProductsLadies";
 import AdminPanel from "./pages/AdminPanel";
+import ProductsPromotions from "./pages/Promotions";
 
 function App() { 
     return (
@@ -12,9 +13,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/add" element={<AdminPanel />} />
-                <Route path="/collections/caballeros" element={<ProductsGentlemen />} />
-                <Route path="/collections/damas" element={<ProductsLadies />} />
-                {/* Ruta dinámica para descripción */}
+                <Route path="/collections/hombre" element={<ProductsGentlemen />} />
+                <Route path="/collections/mujer" element={<ProductsLadies />} />
+                <Route path="/collections/promociones" element={<ProductsPromotions />} />
                 <Route
                     path="/collections/:category/:productName"
                     element={<PageDescriptionProduct />}

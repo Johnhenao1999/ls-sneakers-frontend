@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import ProductsGrid from '../components/ProductsGrid';
-import { BRANDS } from '../constans.js';
 import BrandFilter from '../components/BrandFilter';
+import { BRANDS } from '../constans.js';
 
-function ProducstLadies() {
+function ProductsPromotions() {
     const [selectedBrand, setSelectedBrand] = useState('');
+
     return (
         <div className="app-container">
             <Header />
+
+            {/* Filtro de Marca */}
             <div className='section-container section-gender'>
                 <div>
-                    <p className='heading-title'>ZAPATOS PARA MUJER</p>
-                    <p className='subtitle-section-gender'>Amplio catalogo de zapatos de diferentes marcas con los mejores diseños.</p>
+                    <p className='heading-title'>Promociones</p>
+                    <p className='subtitle-section-gender'>Promociones exclusivas, tiempo limitado.</p>
                 </div>
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
-            <ProductsGrid category="mujer" selectedBrand={selectedBrand}/>
+            <ProductsGrid category="promotion" selectedBrand={selectedBrand} />
         </div>
     );
 }
 
-export default ProducstLadies;
+export default ProductsPromotions;
