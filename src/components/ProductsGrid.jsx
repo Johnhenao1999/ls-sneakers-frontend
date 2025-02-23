@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useProducts } from '../ProductsContext'; // Importar el contexto
@@ -6,7 +6,6 @@ import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand }) {
   const { products } = useProducts(); // Obtener productos desde el contexto
-  console.log(products, "desde");
 
   const filteredProducts = products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
@@ -48,6 +47,8 @@ function ProductsGrid({ category = 'all', selectedBrand }) {
 function ProductInView({ product }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const [currentImage, setCurrentImage] = useState(product.imageUrls[0]); // Imagen inicial
+  const imageIndexRef = useRef(0);
+  const intervalRef = useRef(null);
 
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -63,30 +64,42 @@ function ProductInView({ product }) {
       }).format(product.discountPrice)
     : null;
 
-  // Manejar el hover para cambiar las imágenes
-  let imageIndex = 0;
-  let interval = null;
-
-  const handleMouseEnter = () => {
+  // Cambia la imagen automáticamente en hover o touch
+  const startImageRotation = () => {
     if (product.imageUrls.length > 1) {
-      interval = setInterval(() => {
-        imageIndex = (imageIndex + 1) % product.imageUrls.length;
-        setCurrentImage(product.imageUrls[imageIndex]);
-      }, 1000); // Cambia de imagen cada 1 segundo
+      intervalRef.current = setInterval(() => {
+        imageIndexRef.current = (imageIndexRef.current + 1) % product.imageUrls.length;
+        setCurrentImage(product.imageUrls[imageIndexRef.current]);
+      }, 1000);
     }
   };
 
-  const handleMouseLeave = () => {
-    clearInterval(interval);
+  const stopImageRotation = () => {
+    clearInterval(intervalRef.current);
     setCurrentImage(product.imageUrls[0]); // Vuelve a la imagen principal
   };
+
+  // Maneja el evento de touch en móviles
+  const handleTouch = () => {
+    if (!intervalRef.current) {
+      startImageRotation();
+    } else {
+      stopImageRotation();
+    }
+  };
+
+  // Limpieza del intervalo cuando el componente se desmonta
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
   return (
     <div
       ref={ref}
       className={`product-card-inner ${inView ? 'visible' : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={startImageRotation}
+      onMouseLeave={stopImageRotation}
+      onTouchStart={handleTouch} // Funciona en móviles
     >
       <img src={currentImage} alt={product.name} />
       {product.onSale && formattedDiscountPrice ? (
