@@ -1,63 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
+import { useProducts } from '../ProductsContext'; // Importar el contexto
 import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand }) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { products } = useProducts(); // Obtener productos desde el contexto
+  console.log(products, "desde");
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products');
-        if (!response.ok) throw new Error('Error al obtener los productos');
+  const filteredProducts = products.filter(product =>
+    (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
+    (category === "caballeros" ? product.gender === "Hombre" :
+      category === "mujer" ? product.gender === "Mujer" :
+        true)
+  );
 
-        const data = await response.json();
-        console.log(data);
-        const filteredData = data.filter(product =>
-          (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-          (category === "caballeros" ? product.gender === "Hombre" :
-            category === "mujer" ? product.gender === "Mujer" :
-              true)
-        );
-
-        setProducts(filteredData);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const filteredProducts = selectedBrand
-    ? products.filter(product => product.branch === selectedBrand)
-    : products;
+  const finalProducts = selectedBrand
+    ? filteredProducts.filter(product => product.branch === selectedBrand)
+    : filteredProducts;
 
   const toSlug = (name) => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-
-  if (loading) return <p>Cargando productos...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <section className="product-grid">
       <div className="grid-container">
-        {filteredProducts.map((product) => (
-          <Link
-            key={product._id}
-            to={`/collections/${category}/${toSlug(product.name)}`}
-            state={{ product }}
-            className="product-card-link"
-          >
-            <div className="product-card">
-              <ProductInView product={product} />
-            </div>
-          </Link>
-        ))}
+        {finalProducts.length > 0 ? (
+          finalProducts.map((product) => (
+            <Link
+              key={product._id}
+              to={`/collections/${category}/${toSlug(product.name)}`}
+              state={{ product }}
+              className="product-card-link"
+            >
+              <div className="product-card">
+                <ProductInView product={product} />
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>No hay productos disponibles</p>
+        )}
       </div>
     </section>
   );
@@ -65,6 +47,7 @@ function ProductsGrid({ category = 'all', selectedBrand }) {
 
 function ProductInView({ product }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
+  const [currentImage, setCurrentImage] = useState(product.imageUrls[0]); // Imagen inicial
 
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -74,15 +57,38 @@ function ProductInView({ product }) {
 
   const formattedDiscountPrice = product.discountPrice
     ? new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0,
-    }).format(product.discountPrice)
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+      }).format(product.discountPrice)
     : null;
 
+  // Manejar el hover para cambiar las imágenes
+  let imageIndex = 0;
+  let interval = null;
+
+  const handleMouseEnter = () => {
+    if (product.imageUrls.length > 1) {
+      interval = setInterval(() => {
+        imageIndex = (imageIndex + 1) % product.imageUrls.length;
+        setCurrentImage(product.imageUrls[imageIndex]);
+      }, 1000); // Cambia de imagen cada 1 segundo
+    }
+  };
+
+  const handleMouseLeave = () => {
+    clearInterval(interval);
+    setCurrentImage(product.imageUrls[0]); // Vuelve a la imagen principal
+  };
+
   return (
-    <div ref={ref} className={`product-card-inner ${inView ? 'visible' : ''}`}>
-      <img src={product.imageUrl} alt={product.name} />
+    <div
+      ref={ref}
+      className={`product-card-inner ${inView ? 'visible' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <img src={currentImage} alt={product.name} />
       {product.onSale && formattedDiscountPrice ? (
         <p className="product-discount-price">{formattedDiscountPrice}</p>
       ) : null}

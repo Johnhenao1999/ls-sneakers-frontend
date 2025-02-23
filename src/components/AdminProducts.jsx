@@ -6,7 +6,7 @@ const AddProducts = () => {
   const preset_name = 'lsneakersuploadassets';
   const cloud_name = 'dj2v5y8li';
 
-  const [image, setImage] = useState('');
+  const [images, setImages] = useState('');
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -60,37 +60,42 @@ const AddProducts = () => {
     }));
   };
 
-  const uploadImage = async (e) => {
+  const uploadImages = async (e) => {
     const files = e.target.files;
-    const data = new FormData();
-    data.append('file', files[0]);
-    data.append('upload_preset', preset_name);
+    const uploadedImages = [];
 
     setLoading(true);
-    try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
-        method: 'POST',
-        body: data,
-      });
-      const file = await response.json();
-      setImage(file.secure_url);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error al subir la imagen:', error);
-      setLoading(false);
+    for (const file of files) {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', preset_name);
+
+      try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+          method: 'POST',
+          body: data,
+        });
+
+        const fileData = await response.json();
+        uploadedImages.push(fileData.secure_url);
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
     }
+    setImages((prev) => [...prev, ...uploadedImages]);
+    setLoading(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!image) {
-      alert('Por favor, sube una imagen antes de enviar.');
+    if (images.length === 0) {
+      alert('Por favor, sube al menos una imagen antes de enviar.');
       return;
     }
 
-    const payload = { ...formData, imageUrl: image };
-    console.log('Datos a enviar:', payload);
+    const payload = { ...formData, imageUrls: images };
+
     try {
       const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products', {
         method: 'POST',
@@ -109,7 +114,7 @@ const AddProducts = () => {
           sizes: [],
           onSale: false,
         });
-        setImage('');
+        setImages([]);
       } else {
         const error = await response.json();
         alert(`Error al crear el producto: ${error.message}`);
@@ -119,6 +124,7 @@ const AddProducts = () => {
       alert('Error al enviar los datos.');
     }
   };
+
 
   return (
     <div className="form-container">
@@ -201,12 +207,12 @@ const AddProducts = () => {
         )}
 
         <div className="form-group">
-          <label>Imagen del producto:</label>
-          <input type="file" name="file" onChange={uploadImage} required />
+          <label>Imágenes del producto:</label>
+          <input type="file" name="files" onChange={uploadImages} multiple required />
           {loading ? (
-            <div className="loader"></div> // Loader animado
+            <div className="loader"></div>
           ) : (
-            image && <p>Imagen subida exitosamente.</p>
+            images.length > 0 && images.map((img, index) => <p key={index}>Imagen {index + 1} subida.</p>)
           )}
         </div>
 

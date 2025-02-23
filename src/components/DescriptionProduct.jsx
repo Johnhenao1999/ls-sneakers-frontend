@@ -5,9 +5,9 @@ import '../css/descriptionProduct.css';
 function DescriptionProduct() {
     const location = useLocation();
     const { product } = location.state || {}; // Recupera el producto desde el state
-    console.log(product);
 
-    const [selectedSize, setSelectedSize] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(product?.sizes[0] || null);
+    const [selectedImage, setSelectedImage] = useState(product?.imageUrls[0] || '');
 
     if (!product) {
         return <p>Producto no encontrado</p>;
@@ -42,9 +42,24 @@ function DescriptionProduct() {
     return (
         <div className="description-product">
             <div className="product-details">
+                {/* Imagen principal */}
                 <div className="product-image">
-                    <img src={product.imageUrl} alt={product.name} />
+                    <img src={selectedImage} alt={product.name} className="main-image" />
+                    {/* Miniaturas */}
+                    <div className="image-thumbnails">
+                        {product.imageUrls.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img}
+                                alt={`Vista ${index + 1}`}
+                                className={`thumbnail ${selectedImage === img ? 'active' : ''}`}
+                                onClick={() => setSelectedImage(img)}
+                            />
+                        ))}
+                    </div>
                 </div>
+
+                {/* Información del producto */}
                 <div className="product-info">
                     <h1>{product.name}</h1>
                     {product.onSale && formattedDiscountPrice ? (
@@ -53,25 +68,24 @@ function DescriptionProduct() {
                     <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
                         {formattedPrice}
                     </p>
+
+                    {/* Tallas en botones */}
                     <div className="product-sizes">
-                        <label htmlFor="size-select">Tallas disponibles:</label>
-                        <select
-                            id="size-select"
-                            value={selectedSize || ''}
-                            onChange={(e) => setSelectedSize(e.target.value)}
-                        >
-                            <option value="" disabled>Selecciona tu talla</option>
+                        <p>Tallas disponibles:</p>
+                        <div className="sizes-container">
                             {product.sizes.map((size) => (
-                                <option key={size} value={size}>
+                                <button
+                                    key={size}
+                                    className={`size-button ${selectedSize === size ? 'selected' : ''}`}
+                                    onClick={() => setSelectedSize(size)}
+                                >
                                     {size}
-                                </option>
+                                </button>
                             ))}
-                        </select>
+                        </div>
                     </div>
-                    <button
-                        className="add-to-cart"
-                        onClick={handleWhatsAppClick}
-                    >
+
+                    <button className="add-to-cart" onClick={handleWhatsAppClick}>
                         Me interesa
                     </button>
                 </div>

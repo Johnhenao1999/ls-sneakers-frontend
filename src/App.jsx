@@ -6,23 +6,31 @@ import PageDescriptionProduct from "./pages/PageDescriptionProduct";
 import ProductsLadies from "./pages/ProductsLadies";
 import AdminPanel from "./pages/AdminPanel";
 import ProductsPromotions from "./pages/Promotions";
+import PageViewProducts from "./pages/PageViewProducts";
+import { ProductsProvider } from "../src/ProductsContext"; // Importa el contexto
+import PageEditProduct from "./pages/PageEditProduct";
 
-function App() { 
+function App() {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/add" element={<AdminPanel />} />
-                <Route path="/collections/hombre" element={<ProductsGentlemen />} />
-                <Route path="/collections/mujer" element={<ProductsLadies />} />
-                <Route path="/collections/promociones" element={<ProductsPromotions />} />
-                <Route
-                    path="/collections/:category/:productName"
-                    element={<PageDescriptionProduct />}
-                />
-            </Routes>
-        </Router>
+        <ProductsProvider> {/* Envolver todo el Router con el contexto */}
+            <Router>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/add" element={<AdminPanel />} />
+                    <Route path="/collections/hombre" element={<ProductsGentlemen />} />
+                    <Route path="/collections/mujer" element={<ProductsLadies />} />
+                    <Route path="/collections/promociones" element={<ProductsPromotions />} />
+                    <Route path="/update-products" element={<PageViewProducts />} />
+                    <Route path="/update-product/:id" element={<PageEditProduct />} />
+                    <Route
+                        path="/collections/:category/:productName"
+                        element={<PageDescriptionProduct />}
+                    />
+                </Routes>
+            </Router>
+        </ProductsProvider>
     );
 }
 
 export default App;
+ 

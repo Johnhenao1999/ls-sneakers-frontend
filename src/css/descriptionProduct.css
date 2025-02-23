@@ -8,10 +8,10 @@
 
 .product-details {
     display: flex;
-    flex-wrap: nowrap; /* Asegura que los elementos no se apilen */
+    flex-wrap: nowrap;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 900px;
     width: 100%;
     overflow: hidden;
@@ -20,16 +20,39 @@
 .product-image {
     flex: 1 1 50%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 1rem;
-    border-right: 1px solid #e0e0e0; /* Línea divisoria entre imagen e información */
+    border-right: 1px solid #e0e0e0;
 }
 
-.product-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+.main-image {
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Miniaturas */
+.image-thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.3s, border 0.3s;
+}
+
+.thumbnail:hover, .thumbnail.active {
+    border: 2px solid #007bff;
+    transform: scale(1.1);
 }
 
 .product-info {
@@ -49,62 +72,80 @@
     text-align: left;
 }
 
-
-.product-description {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.6;
+.product-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
 }
 
+.price-strikethrough {
+    text-decoration: line-through;
+    color: #b12704;
+}
+
+.product-discount-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Tallas en botones */
 .product-sizes {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.product-sizes label {
-    font-weight: bold;
-    color: #333;
+.sizes-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
-.product-sizes select {
-    padding: 0.5rem;
-    font-size: 1rem;
+.size-button {
+    padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background 0.3s, border 0.3s;
 }
 
-.selected-size {
-    font-size: 0.9rem;
-    color: #555;
+.size-button:hover, .size-button.selected {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
 }
 
+/* Botón de WhatsApp */
 .add-to-cart {
     padding: 0.8rem 1.5rem;
-    background-color: #ff5a3c;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    align-self: flex-start; /* Alinea el botón a la izquierda */
+    align-self: flex-start;
 }
 
 .add-to-cart:hover {
-    background-color: #e04d34;
+    background-color: #218838;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
     .product-details {
-        flex-wrap: wrap; /* Permite que los elementos se apilen en pantallas pequeñas */
+        flex-wrap: wrap;
     }
 
     .product-image,
     .product-info {
         flex: 1 1 100%;
-        border-right: none; /* Elimina la línea divisoria en móviles */
+        border-right: none;
     }
 
     .product-info {
@@ -112,6 +153,6 @@
     }
 
     .add-to-cart {
-        align-self: center; /* Centra el botón en pantallas pequeñas */
+        align-self: center;
     }
 }
