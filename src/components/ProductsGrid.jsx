@@ -58,10 +58,10 @@ function ProductInView({ product }) {
 
   const formattedDiscountPrice = product.discountPrice
     ? new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 0,
-      }).format(product.discountPrice)
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(product.discountPrice)
     : null;
 
   // Cambia la imagen automáticamente en hover o touch
@@ -85,7 +85,7 @@ function ProductInView({ product }) {
     setCurrentImage(product.imageUrls[0]);
     startImageRotation();
   };
-  
+
   const handleTouchEnd = () => {
     stopImageRotation();
   };
@@ -102,9 +102,12 @@ function ProductInView({ product }) {
       onMouseEnter={startImageRotation}
       onMouseLeave={stopImageRotation}
       onTouchStart={handleTouchStart} // Inicia el cambio de imagen en mobile
-      onTouchEnd={handleTouchEnd} 
+      onTouchEnd={handleTouchEnd}
     >
-      <img src={currentImage} alt={product.name} />
+      <div className="product-card-image">
+        <img src={currentImage} alt={product.name} />
+      </div>
+
       {product.onSale && formattedDiscountPrice ? (
         <p className="product-discount-price">{formattedDiscountPrice}</p>
       ) : null}

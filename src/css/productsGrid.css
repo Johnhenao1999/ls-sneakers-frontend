@@ -1,6 +1,7 @@
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas, cada una con el mismo tamaño */
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas en desktop */
+    grid-auto-rows: 1fr; /* Asegura que todas las filas tengan la misma altura */
     gap: 1.5rem; /* Espaciado entre los productos */
     justify-items: center; /* Centra los items en la celda de la grid */
     margin: 0 auto;
@@ -9,6 +10,11 @@
 }
 
 .product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 350px; /* Ajusta la altura mínima */
     border-radius: 8px;
     text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -31,26 +37,30 @@
     transform: translateY(-10px) scale(1.05); /* Elevación y aumento de tamaño */
 }
 
-.product-card img {
+/* Contenedor de la imagen para que todas sean del mismo tamaño */
+.product-card-image {
     width: 100%;
-    height: auto;
+    height: 270px; /* Ajusta la altura según el diseño */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Evita que la imagen desborde */
     border-radius: 8px;
-    transition: transform 0.3s ease; /* Suaviza la animación de la imagen */
 }
 
-.product-card:hover img {
-    transform: scale(1.0); /* Zoom de la imagen */
+.product-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que todas las imágenes ocupen el mismo espacio sin deformarse */
+    aspect-ratio: 1 / 1; /* Mantiene la proporción cuadrada */
 }
-
-.product-card-link {
-    text-decoration: none;
-}	
 
 .product-card h3 {
     margin: 0.5rem 0;
     font-size: 1.2rem;
     color: #333;
     transition: color 0.3s ease; /* Suaviza el cambio de color */
+    text-align: center;
 }
 
 .product-price {
@@ -65,16 +75,19 @@
     font-weight: bold;
     color: #ff5a3c;
     margin: 0;
-  }
+}
   
-  .price-strikethrough {
+.price-strikethrough {
     text-decoration: line-through;
     color: gray !important;
     font-size: 1.1rem !important;
-  }
+}
+
+.product-card-link {
+    text-decoration: none;
+}	
 
 @media (max-width: 1120px) {
-
     .product-card {
         max-width: initial;
         min-width: initial;
@@ -86,12 +99,18 @@
 
     .grid-container {
         padding: 16px;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas medianas */
     }
 }
 
 @media (max-width: 768px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 300px) {
+    .grid-container {
+        grid-template-columns: repeat(1, 1fr); /* 1 columna en móviles */
     }
 }
