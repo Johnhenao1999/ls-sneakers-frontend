@@ -2,10 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useProducts } from '../ProductsContext'; // Importar el contexto
+import SkeletonProductCard from './SkeletonProductCard'; // Importar el esqueleto
 import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand }) {
   const { products } = useProducts(); // Obtener productos desde el contexto
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+
+  useEffect(() => {
+    if (products.length > 0) {
+      setTimeout(() => setIsLoading(false), 1000); // Simula carga (1.5s)
+    }
+  }, [products]);
 
   const filteredProducts = products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
@@ -23,7 +31,10 @@ function ProductsGrid({ category = 'all', selectedBrand }) {
   return (
     <section className="product-grid">
       <div className="grid-container">
-        {finalProducts.length > 0 ? (
+        {isLoading ? (
+          // Renderiza placeholders mientras carga
+          Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
+        ) : finalProducts.length > 0 ? (
           finalProducts.map((product) => (
             <Link
               key={product._id}
@@ -67,6 +78,13 @@ function ProductInView({ product }) {
   // Cambia la imagen automáticamente en hover o touch
   const startImageRotation = () => {
     if (product.imageUrls.length > 1) {
+      clearInterval(intervalRef.current); // Asegura que no haya intervalos previos
+
+      // Cambia inmediatamente a la siguiente imagen
+      imageIndexRef.current = 1;
+      setCurrentImage(product.imageUrls[1]);
+
+      // Luego empieza la rotación de imágenes cada 1000ms
       intervalRef.current = setInterval(() => {
         imageIndexRef.current = (imageIndexRef.current + 1) % product.imageUrls.length;
         setCurrentImage(product.imageUrls[imageIndexRef.current]);
@@ -75,19 +93,9 @@ function ProductInView({ product }) {
   };
 
   const stopImageRotation = () => {
-    clearInterval(intervalRef.current);
+    clearInterval(intervalRef.current); // Detiene el intervalo
+    imageIndexRef.current = 0; // Reinicia el índice de imagen
     setCurrentImage(product.imageUrls[0]); // Vuelve a la imagen principal
-  };
-
-  const handleTouchStart = () => {
-    clearInterval(intervalRef.current); // Detiene cualquier intervalo anterior
-    imageIndexRef.current = 0; // Reinicia la imagen a la primera
-    setCurrentImage(product.imageUrls[0]);
-    startImageRotation();
-  };
-
-  const handleTouchEnd = () => {
-    stopImageRotation();
   };
 
   // Limpieza del intervalo cuando el componente se desmonta
@@ -101,17 +109,17 @@ function ProductInView({ product }) {
       className={`product-card-inner ${inView ? 'visible' : ''}`}
       onMouseEnter={startImageRotation}
       onMouseLeave={stopImageRotation}
-      onTouchStart={handleTouchStart} // Inicia el cambio de imagen en mobile
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={startImageRotation}
+      onTouchEnd={stopImageRotation}
     >
       <div className="product-card-image">
         <img src={currentImage} alt={product.name} />
       </div>
 
       {product.onSale && formattedDiscountPrice ? (
-        <p className="product-discount-price">{formattedDiscountPrice}</p>
+        <p className="product-discount-price-grid">{formattedDiscountPrice}</p>
       ) : null}
-      <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
+      <p className={`product-price-grid ${product.onSale ? 'price-strikethrough-grid' : ''}`}>
         {formattedPrice}
       </p>
       <h3>{product.name}</h3>

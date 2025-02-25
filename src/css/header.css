@@ -86,7 +86,7 @@
         display: block;
     }
 
-    .active {
+    .active-header {
         padding: 16px;
     }
 
@@ -138,7 +138,7 @@
         border: none;
     }
 
-    .menu-toggle-active {
+    .menu-toggle-active-header {
         position: absolute;
         right: 0;
         font-size: 30px;
@@ -147,7 +147,7 @@
         border: none;
     }
 
-    .menu-toggle-active .actions img{
+    .menu-toggle-active-header .actions img{
         display: none;
     }
 

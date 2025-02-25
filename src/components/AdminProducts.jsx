@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { BRANDS } from '../constans.js';
 import "../css/adminpanel.css";
+import { useProducts } from "../ProductsContext.jsx"; // 👈 Importa el contexto
 
 const AddProducts = () => {
   const preset_name = 'lsneakersuploadassets';
   const cloud_name = 'dj2v5y8li';
+  const { addProduct } = useProducts();
 
   const [images, setImages] = useState('');
   const [loading, setLoading] = useState(false);
@@ -90,38 +92,44 @@ const AddProducts = () => {
     e.preventDefault();
 
     if (images.length === 0) {
-      alert('Por favor, sube al menos una imagen antes de enviar.');
+      alert("Por favor, sube al menos una imagen antes de enviar.");
       return;
     }
 
     const payload = { ...formData, imageUrls: images };
 
     try {
-      const response = await fetch('https://ls-sneakers-backend.vercel.app/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("https://ls-sneakers-backend.vercel.app/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        setShowModal(true);
-        setFormData({
-          name: '',
-          price: '',
-          discountPrice: '',
-          branch: '',
-          gender: '',
-          sizes: [],
-          onSale: false,
-        });
-        setImages([]);
-      } else {
+      if (!response.ok) {
         const error = await response.json();
         alert(`Error al crear el producto: ${error.message}`);
+        return;
       }
+
+      const newProduct = await response.json();
+
+      addProduct(newProduct); // ✅ Agregar el nuevo producto al estado global
+
+      setShowModal(true);
+      setFormData({
+        name: "",
+        price: "",
+        discountPrice: "",
+        branch: "",
+        gender: "",
+        sizes: [],
+        onSale: false,
+      });
+      setImages([]);
+
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
-      alert('Error al enviar los datos.');
+      console.error("Error al enviar los datos:", error);
+      alert("Error al enviar los datos.");
     }
   };
 

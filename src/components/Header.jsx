@@ -17,8 +17,8 @@ function Header() {
 
   return (
     <header className="navbar">
-      <div className={isMenuOpen ? "active" : "navbar-content"}>
-        <button className={isMenuOpen ? "menu-toggle-active" : "menu-toggle"} onClick={toggleMenu}>
+      <div className={isMenuOpen ? "active-header" : "navbar-content"}>
+        <button className={isMenuOpen ? "menu-toggle-active-header" : "menu-toggle"} onClick={toggleMenu}>
           {isMenuOpen ? '✖' : '☰'}
         </button>
         <Link to="/" className="logo">
@@ -29,7 +29,8 @@ function Header() {
           <Link to="/"><img className='icons-menu' src={home} alt="" /> INICIO</Link>
           <Link to="/collections/mujer"><img className='icons-menu' src={iconMujer} alt="" />MUJER</Link>
           <Link to="/collections/hombre"><img className='icons-menu'src={iconHombre} alt="" />HOMBRE</Link>
-          <Link to="/collections/promociones"><img className='icons-menu' src={promotion} alt="" />PROMOCIONES</Link>
+          <Link to="/collections/hombre"><img className='icons-menu'src={iconHombre} alt="" />NIÑOS</Link>
+          <Link to="/collections/promociones"><img className='icons-menu' src={promotion} alt="" />SALE | DESCUENTOS</Link>
         </nav>
 
         {/* Call-to-Action Button - Hidden when menu is open */}
