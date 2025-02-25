@@ -9,6 +9,7 @@ import ProductsPromotions from "./pages/Promotions";
 import PageViewProducts from "./pages/PageViewProducts";
 import { ProductsProvider } from "../src/ProductsContext"; // Importa el contexto
 import PageEditProduct from "./pages/PageEditProduct";
+import { Analytics } from "@vercel/analytics/react"; // Importa Analytics
 
 function App() {
     return (
@@ -28,9 +29,9 @@ function App() {
                     />
                 </Routes>
             </Router>
+            <Analytics /> {/* Agregar aquí para que cubra toda la app */}
         </ProductsProvider>
     );
 }
 
 export default App;
- 
