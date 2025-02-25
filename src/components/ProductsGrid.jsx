@@ -79,13 +79,15 @@ function ProductInView({ product }) {
     setCurrentImage(product.imageUrls[0]); // Vuelve a la imagen principal
   };
 
-  // Maneja el evento de touch en móviles
-  const handleTouch = () => {
-    if (!intervalRef.current) {
-      startImageRotation();
-    } else {
-      stopImageRotation();
-    }
+  const handleTouchStart = () => {
+    clearInterval(intervalRef.current); // Detiene cualquier intervalo anterior
+    imageIndexRef.current = 0; // Reinicia la imagen a la primera
+    setCurrentImage(product.imageUrls[0]);
+    startImageRotation();
+  };
+  
+  const handleTouchEnd = () => {
+    stopImageRotation();
   };
 
   // Limpieza del intervalo cuando el componente se desmonta
@@ -99,7 +101,8 @@ function ProductInView({ product }) {
       className={`product-card-inner ${inView ? 'visible' : ''}`}
       onMouseEnter={startImageRotation}
       onMouseLeave={stopImageRotation}
-      onTouchStart={handleTouch} // Funciona en móviles
+      onTouchStart={handleTouchStart} // Inicia el cambio de imagen en mobile
+      onTouchEnd={handleTouchEnd} 
     >
       <img src={currentImage} alt={product.name} />
       {product.onSale && formattedDiscountPrice ? (
