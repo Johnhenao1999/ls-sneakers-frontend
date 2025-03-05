@@ -79,6 +79,10 @@
     display: none;
 }
 
+.promotions{
+    color: #e11d48 !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
 

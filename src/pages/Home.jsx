@@ -10,7 +10,14 @@ function HomePage() {
     <div className="app-container">
       <Header />
       <BannerHero />
-      <ProductsGrid category="all" />
+      <div>
+        <h1 className='title-principal'>Nuestros productos</h1>
+        <ProductsGrid category="all" maxItems={8} />
+      </div>
+      <div>
+        <h1 className='title-principal'>Promociones destacadas</h1>
+        <ProductsGrid category="promotion" maxItems={4} />
+      </div>
     </div>
   );
 }

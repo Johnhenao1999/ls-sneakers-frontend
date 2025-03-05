@@ -30,7 +30,7 @@ function Header() {
           <Link to="/collections/mujer"><img className='icons-menu' src={iconMujer} alt="" />MUJER</Link>
           <Link to="/collections/hombre"><img className='icons-menu'src={iconHombre} alt="" />HOMBRE</Link>
           <Link to="/collections/hombre"><img className='icons-menu'src={iconHombre} alt="" />NIÑOS</Link>
-          <Link to="/collections/promociones"><img className='icons-menu' src={promotion} alt="" />SALE | DESCUENTOS</Link>
+          <Link to="/collections/promociones" className='promotions'><img className='icons-menu' src={promotion} alt="" />SALE | DESCUENTOS</Link>
         </nav>
 
         {/* Call-to-Action Button - Hidden when menu is open */}
