@@ -34,10 +34,10 @@ function ViewProducts() {
         className="search-input"
       />
 
-      <div className="product-grid">
+      <div className="product-grid-view">
         {currentProducts.length > 0 ? (
           currentProducts.map((product) => (
-            <div key={product._id} className="product-card">
+            <div key={product._id} className="product-card-view">
               <img src={product.imageUrls[0]} alt={product.name} />
               <h3>{product.name}</h3>
               <p>Precio: ${product.price}</p>

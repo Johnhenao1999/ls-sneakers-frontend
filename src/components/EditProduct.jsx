@@ -4,8 +4,9 @@ import "../css/editProduct.css";
 
 function EditProduct({ productId }) {
   const { products, updateProduct } = useProducts();
-  const preset_name = 'lsneakersuploadassets';
-  const cloud_name = 'dj2v5y8li';
+  const preset_name = "lsneakersuploadassets";
+  const cloud_name = "dj2v5y8li";
+  
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -13,10 +14,11 @@ function EditProduct({ productId }) {
     branch: "",
     gender: "",
     sizes: [],
-    onSale: false, 
+    onSale: false,
     imageUrls: [],
   });
   const [loading, setLoading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState([]);
 
   useEffect(() => {
     const foundProduct = products.find((p) => p._id === productId);
@@ -48,45 +50,52 @@ function EditProduct({ productId }) {
     setLoading(true);
     for (const file of files) {
       const data = new FormData();
-      data.append('file', file);
-      data.append('upload_preset', preset_name);
+      data.append("file", file);
+      data.append("upload_preset", preset_name);
 
       try {
         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
-          method: 'POST',
+          method: "POST",
           body: data,
         });
 
         const fileData = await response.json();
         uploadedImages.push(fileData.secure_url);
       } catch (error) {
-        console.error('Error al subir la imagen:', error);
+        console.error("Error al subir la imagen:", error);
       }
     }
     setProductData((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, ...uploadedImages] }));
     setLoading(false);
   };
 
+  // Marcar imágenes para eliminar en lugar de eliminarlas directamente
   const removeImage = (index) => {
-    setProductData((prev) => ({
-      ...prev,
-      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
-    }));
+    const imageToRemove = productData.imageUrls[index];
+    setDeletedImages((prev) => [...prev, imageToRemove]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Excluir imágenes que fueron marcadas para eliminar antes de enviar la actualización
+    const updatedProductData = {
+      ...productData,
+      imageUrls: productData.imageUrls.filter((img) => !deletedImages.includes(img)),
+    };
+
     try {
       const response = await fetch(`https://ls-sneakers-backend.vercel.app/api/products/${productId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
+        body: JSON.stringify(updatedProductData),
       });
 
       if (!response.ok) throw new Error("Error al actualizar el producto");
 
       alert("Producto actualizado con éxito");
-      updateProduct(productData);
+      updateProduct(updatedProductData);
+      setDeletedImages([]); // Limpiar la lista de imágenes eliminadas después de guardar
     } catch (error) {
       console.error(error);
       alert("Hubo un error al actualizar el producto");
@@ -117,12 +126,7 @@ function EditProduct({ productId }) {
 
         <label>
           En Oferta:
-          <input
-            type="checkbox"
-            name="onSale"
-            checked={productData.onSale}
-            onChange={handleChange}
-          />
+          <input type="checkbox" name="onSale" checked={productData.onSale} onChange={handleChange} />
         </label>
 
         <label>
@@ -174,9 +178,14 @@ function EditProduct({ productId }) {
           Imágenes actuales:
           <div className="image-preview-container">
             {productData.imageUrls.map((img, index) => (
-              <div key={index} className="image-item">
+              <div
+                key={index}
+                className={`image-item ${deletedImages.includes(img) ? "marked-for-deletion" : ""}`}
+              >
                 <img src={img} alt={`Imagen ${index + 1}`} />
-                <button className="delete-button" onClick={() => removeImage(index)}>X</button>
+                <button className="delete-button" type="button" onClick={() => removeImage(index)}>
+                  X
+                </button>
               </div>
             ))}
           </div>
@@ -188,7 +197,9 @@ function EditProduct({ productId }) {
           {loading && <p>Subiendo imágenes...</p>}
         </label>
 
-        <button type="submit" className="submit-button">Guardar Cambios</button>
+        <button type="submit" className="submit-button">
+          Guardar Cambios
+        </button>
       </form>
     </div>
   );
