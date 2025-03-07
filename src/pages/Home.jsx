@@ -4,6 +4,7 @@ import '../App.css';
 import Header from '../components/Header';
 import ProductsGrid from '../components/ProductsGrid';
 import BannerHero from '../components/BannerHero';
+import Footer from '../components/Footer';
 
 function HomePage() {
   return (
@@ -18,6 +19,7 @@ function HomePage() {
         <h1 className='title-principal'>Promociones destacadas</h1>
         <ProductsGrid category="promotion" maxItems={4} />
       </div>
+      <Footer />
     </div>
   );
 }

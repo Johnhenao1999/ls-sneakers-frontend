@@ -62,12 +62,14 @@ function DescriptionProduct() {
                 {/* Información del producto */}
                 <div className="product-info">
                     <h1>{product.name}</h1>
-                    {product.onSale && formattedDiscountPrice ? (
-                        <p className="product-discount-price">{formattedDiscountPrice}</p>
-                    ) : null}
-                    <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
-                        {formattedPrice}
-                    </p>
+                    <div>
+                        {product.onSale && formattedDiscountPrice ? (
+                            <p className="product-discount-price">{formattedDiscountPrice}</p>
+                        ) : null}
+                        <p className={`product-price ${product.onSale ? 'price-strikethrough' : ''}`}>
+                            {formattedPrice}
+                        </p>
+                    </div>
 
                     {/* Tallas en botones */}
                     <div className="product-sizes">

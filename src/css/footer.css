@@ -1,0 +1,126 @@
+.footer {
+    background-color: #FFFFFF;
+    padding: 2rem 1rem;
+    font-family: 'Lora', serif;
+    margin-top: 30px;
+  }
+  
+  .footer-container {
+    max-width: 1120px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .footer-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+    text-align: left;
+  }
+  
+  .accordion-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0;
+  }
+  
+  .accordion-title .arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .accordion-title .arrow.open {
+    transform: rotate(180deg);
+  }
+  
+  .accordion-content {
+    list-style: none;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+  
+  .accordion-content.open {
+    max-height: 200px; /* Ajusta según sea necesario */
+  }
+  
+  .accordion-content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .accordion-content li a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+  
+  .accordion-content li a:hover {
+    color: #ff5a3c;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #777;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* Responsive: convertir en acordeón en móviles */
+  @media (max-width: 1024px) {
+    .footer-section{
+        margin-bottom: 0;
+    }
+
+    .footer-container {
+      flex-direction: column;
+    }
+  
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+    }
+  
+    .accordion-content.open {
+      max-height: 200px;
+    }
+  
+    .accordion-title {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .accordion-title .arrow {
+      transition: transform 0.3s ease;
+    }
+  
+    .accordion-title .arrow.open {
+      transform: rotate(180deg);
+    }
+  }
+  
+  

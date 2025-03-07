@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import ProductsGrid from '../components/ProductsGrid';
 import { BRANDS } from '../constans.js';
 import BrandFilter from '../components/BrandFilter';
+import Footer from '../components/Footer';
 
 function ProducstLadies() {
     const [selectedBrand, setSelectedBrand] = useState('');
@@ -17,6 +18,7 @@ function ProducstLadies() {
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
             <ProductsGrid category="mujer" selectedBrand={selectedBrand}/>
+            <Footer />
         </div>
     );
 }

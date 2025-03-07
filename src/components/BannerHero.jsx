@@ -13,9 +13,9 @@ const HeroSection = () => {
       />
 
       <div className="hero-content">
-        <h1 className="fade-in">Descubre el mundo de LSNEAKERS</h1>
+        <h1 className="fade-in">Descubre tu estilo LSNEAKERS</h1>
         <p className="fade-in delay-1">
-          Bienvenido a nuestra tienda, donde cada paso es una declaración de estilo.
+          Bienvenido a nuestra tienda.
           Explora las últimas tendencias en zapatos para cada ocasión.
         </p>
       </div>

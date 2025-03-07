@@ -43,7 +43,12 @@
   font-style: oblique;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .title-principal {
+    padding: 16px;
+    font-size: 20px;
+  }
+
   .section-container {
     padding: 0 16px;
   }

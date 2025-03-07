@@ -102,10 +102,6 @@ function ProductInView({ product }) {
       {product.onSale && <div className="offer-badge">Oferta</div>}
         <img src={currentImage} alt={product.name} />
       </div>
-      <div className='product-card-content'>
-        <h3>{product.name}</h3>
-        <h3 className='product-card-branch'>{product.branch}</h3>
-      </div>
       <div className='product-card-price-container'>
         {product.onSale && formattedDiscountPrice ? (
           <p className="product-discount-price-grid">{formattedDiscountPrice}</p>
@@ -113,6 +109,10 @@ function ProductInView({ product }) {
         <p className={`product-price-grid ${product.onSale ? 'price-strikethrough-grid' : ''}`}>
           {formattedPrice}
         </p>
+      </div>
+      <div className='product-card-content'>
+        <h3>{product.name}</h3>
+        <h3 className='product-card-branch'>{product.branch}</h3>
       </div>
     </div>
   );
