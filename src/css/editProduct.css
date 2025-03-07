@@ -1,118 +1,130 @@
-/* Contenedor principal */
 .edit-product-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Título */
-  .edit-product-container h2 {
-    text-align: center;
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  /* Formulario */
-  .edit-product-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .edit-product-form label {
-    font-weight: bold;
-    color: #555;
-    font-size: 14px;
-  }
-  
-  .edit-product-form input,
-  .edit-product-form select {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border 0.3s ease-in-out;
-  }
-  
-  .edit-product-form input:focus,
-  .edit-product-form select:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  /* Checkbox */
-  .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .checkbox-group label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-  }
-  
-  /* Miniaturas de imágenes */
-  .image-preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .image-preview-container img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .image-preview-container img:hover {
-    transform: scale(1.1);
-  }
-  
-  /* Botón */
-  .submit-button {
-    width: 100%;
-    padding: 12px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .submit-button:hover {
-    background: #0056b3;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .edit-product-container {
-      width: 90%;
-      padding: 15px;
-    }
-  
-    .edit-product-form input,
-    .edit-product-form select {
-      font-size: 14px;
-      padding: 8px;
-    }
-  
-    .submit-button {
-      font-size: 14px;
-      padding: 10px;
-    }
-  }
-  
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e11d48;
+}
+
+h2 {
+  text-align: center;
+  color: #e11d48;
+}
+
+.edit-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #333;
+}
+
+input,
+select {
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #e11d48;
+}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.submit-button {
+  background: #e11d48;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #c81a3a;
+}
+
+/* Estilos para las tallas */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8f8f8;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.checkbox-group input {
+  cursor: pointer;
+}
+
+/* Estilos de imágenes */
+.image-preview-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.image-item {
+  position: relative;
+  display: inline-block;
+}
+
+.image-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #e11d48;
+}
+
+.delete-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #e11d48;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.delete-button:hover {
+  background: #c81a3a;
+}
+
+input[type="file"] {
+  display: block;
+  margin-top: 10px;
+}
