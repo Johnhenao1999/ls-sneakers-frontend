@@ -13,6 +13,7 @@
     "@radix-ui/react-dialog": "^1.1.6",
     "@vercel/analytics": "^1.5.0",
     "lsneakers-front": "file:",
+    "lucide-react": "^0.479.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-image-zoom": "^1.3.1",

@@ -116,7 +116,7 @@ input[type="checkbox"] {
 }
 
 input:checked + .slider {
-  background-color: #4caf50;
+  background-color: #e11d48;
 }
 
 input:checked + .slider:before {
