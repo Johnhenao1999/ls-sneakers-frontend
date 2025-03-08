@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../css/adminLogin.css";
+import "../css/adminlogin.css";
 
 function AdminLogin() {
   const { login } = useAuth();
