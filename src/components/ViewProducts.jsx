@@ -4,9 +4,12 @@ import { Link } from "react-router-dom";
 import '../css/viewProducts.css';
 
 function ViewProducts() {
-  const { products } = useProducts();
+  const { products, deleteProduct } = useProducts();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const productsPerPage = 8;
 
   // Filtrar productos por nombre o categoría
@@ -19,8 +22,27 @@ function ViewProducts() {
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  // Manejo de eliminación con modal-delete
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteProduct(selectedProduct._id);
+      setStatusMessage("✅ Producto eliminado con éxito.");
+    } catch (error) {
+      setStatusMessage("❌ Ha ocurrido un error al eliminar el producto.");
+    }
+    setIsDeleting(false);
+
+    // Cierra el modal-delete después de 2 segundos
+    setTimeout(() => {
+      setSelectedProduct(null);
+      setStatusMessage("");
+    }, 2000);
+  };
 
   return (
     <div className="panel-container">
@@ -46,7 +68,7 @@ function ViewProducts() {
                 <Link to={`/update-product/${product._id}`}>
                   <button className="edit-btn">Editar</button>
                 </Link>
-                <button className="delete-btn" onClick={() => console.log("Eliminar", product._id)}>
+                <button className="delete-btn" onClick={() => setSelectedProduct(product)}>
                   Eliminar
                 </button>
               </div>
@@ -69,6 +91,26 @@ function ViewProducts() {
           </button>
         ))}
       </div>
+
+      {/* modal-delete de confirmación */}
+      {selectedProduct && (
+        <div className="modal-delete-overlay">
+          <div className="modal-delete">
+            <p>¿Estás seguro de que deseas eliminar <strong>{selectedProduct.name}</strong>?</p>
+            
+            {statusMessage ? (
+              <p className="status-message">{statusMessage}</p>
+            ) : (
+              <div className="modal-delete-buttons">
+                <button className="cancel-btn" onClick={() => setSelectedProduct(null)}>Cancelar</button>
+                <button className="confirm-btn" onClick={handleDelete} disabled={isDeleting}>
+                  {isDeleting ? "Eliminando..." : "Eliminar"}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

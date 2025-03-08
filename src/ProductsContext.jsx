@@ -6,20 +6,20 @@ const CACHE_KEY = "cachedProducts";
 const CACHE_TIME = 30 * 60 * 1000;
 const API_URL = "https://ls-sneakers-backend.vercel.app/api/products";
 
+// Obtener productos de la caché
 const getCachedProducts = () => {
   const cachedData = localStorage.getItem(CACHE_KEY);
   if (cachedData) {
     const { products, timestamp } = JSON.parse(cachedData);
     if (Date.now() - timestamp < CACHE_TIME) {
       console.log("✅ Usando datos en caché");
-      console.log("🕒 Tiempo restante:", (CACHE_TIME - (Date.now() - timestamp)) / 1000, "segundos");
-      console.log("📦 Productos en caché:", products);
       return products;
     }
   }
   return null;
 };
 
+// Guardar productos en la caché
 const saveProductsToCache = (products) => {
   localStorage.setItem(CACHE_KEY, JSON.stringify({ products, timestamp: Date.now() }));
 };
@@ -69,8 +69,27 @@ const ProductsProvider = ({ children }) => {
     });
   };
 
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await fetch(`${API_URL}/${productId}`, { method: "DELETE" });
+
+      if (!response.ok) throw new Error("Error al eliminar el producto");
+
+      // Actualizar estado y caché eliminando el producto
+      setProducts((prevProducts) => {
+        const updatedProducts = prevProducts.filter((product) => product._id !== productId);
+        saveProductsToCache(updatedProducts);
+        return updatedProducts;
+      });
+
+      console.log("✅ Producto eliminado y caché actualizada");
+    } catch (error) {
+      console.error("❌ Error al eliminar el producto:", error);
+    }
+  };
+
   return (
-    <ProductsContext.Provider value={{ products, fetchProducts, addProduct, updateProduct }}>
+    <ProductsContext.Provider value={{ products, fetchProducts, addProduct, updateProduct, deleteProduct }}>
       {children}
     </ProductsContext.Provider>
   );
