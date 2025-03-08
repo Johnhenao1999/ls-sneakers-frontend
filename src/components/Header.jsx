@@ -7,6 +7,7 @@ import iconHombre from "../assets/hombre.png";
 import iconMujer from "../assets/mujer.png";
 import promotion from "../assets/etiqueta-de-descuento.png";
 import home from "../assets/home.png";
+import iconNino from "../assets/estudiante.png";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,7 +30,7 @@ function Header() {
           <Link to="/"><img className='icons-menu' src={home} alt="" /> INICIO</Link>
           <Link to="/collections/mujer"><img className='icons-menu' src={iconMujer} alt="" />MUJER</Link>
           <Link to="/collections/hombre"><img className='icons-menu'src={iconHombre} alt="" />HOMBRE</Link>
-          <Link to="/collections/ninos"><img className='icons-menu'src={iconHombre} alt="" />NIÑOS</Link>
+          <Link to="/collections/ninos"><img className='icons-menu'src={iconNino} alt="" />NIÑOS</Link>
           <Link to="/collections/promociones" className='promotions'><img className='icons-menu' src={promotion} alt="" />SALE | DESCUENTOS</Link>
         </nav>
 
