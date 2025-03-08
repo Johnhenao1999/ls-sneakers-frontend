@@ -36,7 +36,7 @@ function App() {
                             path="/collections/:category/:productName"
                             element={<PageDescriptionProduct />}
                         />
-                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/admin-login" element={<AdminLogin />} />
 
                         {/* 🔒 Rutas protegidas por autenticación */}
                         <Route element={<PrivateRoute />}>
