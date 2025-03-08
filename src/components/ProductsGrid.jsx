@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useProducts } from '../ProductsContext'; // Importar el contexto
-import SkeletonProductCard from './SkeletonProductCard'; // Importar el esqueleto
 import '../css/productsGrid.css';
 
-function ProductsGrid({ category = 'all', selectedBrand, maxItems }) {
+function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProducts }) {
   const { products } = useProducts(); // Obtener productos desde el contexto
 
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-    (category === "caballeros" ? product.gender === "Hombre" :
+    (category === "hombres" ? product.gender === "Hombre" :
       category === "mujer" ? product.gender === "Mujer" :
-        true)
+        category === "ninos" ? product.gender === "Niños" :
+          true)
   );
 
   const finalProducts = selectedBrand
@@ -99,7 +99,7 @@ function ProductInView({ product }) {
       onTouchEnd={stopImageRotation}
     >
       <div className="product-card-image">
-      {product.onSale && <div className="offer-badge">Oferta</div>}
+        {product.onSale && <div className="offer-badge">Oferta</div>}
         <img src={currentImage} alt={product.name} />
       </div>
       <div className='product-card-price-container'>

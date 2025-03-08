@@ -1,41 +1,50 @@
 import React, { useState } from 'react';
-import { BRANDS } from '../constans.js';
+import { BRANDS, sizesByGender, genders } from '../constans.js';
 import "../css/adminpanel.css";
-import { useProducts } from "../ProductsContext.jsx"; // 👈 Importa el contexto
+import { useProducts } from "../ProductsContext.jsx";
 
 const AddProducts = () => {
   const preset_name = 'lsneakersuploadassets';
   const cloud_name = 'dj2v5y8li';
   const { addProduct } = useProducts();
 
-  const [images, setImages] = useState('');
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
+    priceFormatted: '',
     discountPrice: '',
+    discountPriceFormatted: '',
     branch: '',
     gender: '',
     sizes: [],
     onSale: false,
   });
 
-  const sizesByGender = {
-    Hombre: ['36 HOMBRE', '37 HOMBRE', '38 HOMBRE'],
-    Mujer: ['36 MUJER', '37 MUJER', '38 MUJER'],
-    Unisex: ['36 MUJER', '37 MUJER', '38 MUJER', '36 HOMBRE', '37 HOMBRE', '38 HOMBRE'],
-  };
-
-  const genders = ['Hombre', 'Mujer', 'Unisex'];
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-      sizes: name === 'gender' ? [] : prev.sizes,
-    }));
+
+    // Si es un campo de precio, formatearlo con el signo de peso
+    if (name === 'price' || name === 'discountPrice') {
+      const numericValue = value.replace(/\D/g, ""); // Elimina todo excepto números
+      const formattedValue = numericValue
+        ? `$ ${new Intl.NumberFormat("es-CO").format(numericValue)}`
+        : "";
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue, // Guardar solo el valor numérico
+        [`${name}Formatted`]: formattedValue, // Guardar la versión formateada con el signo $
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        sizes: name === 'gender' ? [] : prev.sizes,
+      }));
+    }
   };
 
   const handleSizeChange = (e) => {
@@ -59,6 +68,7 @@ const AddProducts = () => {
       ...prev,
       onSale: !prev.onSale,
       discountPrice: prev.onSale ? '' : prev.discountPrice,
+      discountPriceFormatted: prev.onSale ? '' : prev.discountPriceFormatted,
     }));
   };
 
@@ -96,7 +106,12 @@ const AddProducts = () => {
       return;
     }
 
-    const payload = { ...formData, imageUrls: images };
+    const payload = {
+      ...formData,
+      price: Number(formData.price),
+      discountPrice: formData.onSale ? Number(formData.discountPrice) : null,
+      imageUrls: images
+    };
 
     try {
       const response = await fetch("https://ls-sneakers-backend.vercel.app/api/products", {
@@ -119,7 +134,9 @@ const AddProducts = () => {
       setFormData({
         name: "",
         price: "",
+        priceFormatted: "",
         discountPrice: "",
+        discountPriceFormatted: "",
         branch: "",
         gender: "",
         sizes: [],
@@ -132,7 +149,6 @@ const AddProducts = () => {
       alert("Error al enviar los datos.");
     }
   };
-
 
   return (
     <div className="form-container">
@@ -150,7 +166,7 @@ const AddProducts = () => {
         </div>
 
         <div className="form-group">
-          <label>Categoría:</label>
+          <label>Marca:</label>
           <select name="branch" value={formData.branch} onChange={handleInputChange} required>
             <option value="">Seleccione una categoría</option>
             {BRANDS.map((branch) => (
@@ -164,9 +180,9 @@ const AddProducts = () => {
         <div className="form-group">
           <label>Precio:</label>
           <input
-            type="number"
+            type="text"
             name="price"
-            value={formData.price}
+            value={formData.priceFormatted || ""}
             onChange={handleInputChange}
             required
           />
@@ -183,7 +199,13 @@ const AddProducts = () => {
         {formData.onSale && (
           <div className="form-group">
             <label>Precio con descuento:</label>
-            <input type="number" name="discountPrice" value={formData.discountPrice} onChange={handleInputChange} required={formData.onSale} />
+            <input
+              type="text"
+              name="discountPrice"
+              value={formData.discountPriceFormatted || ""}
+              onChange={handleInputChange}
+              required
+            />
           </div>
         )}
 

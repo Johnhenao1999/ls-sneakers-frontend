@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useProducts } from "../ProductsContext";
 import "../css/editProduct.css";
+import { BRANDS, sizesByGender, genders } from '../constans.js';
 
 function EditProduct({ productId }) {
   const { products, updateProduct } = useProducts();
   const preset_name = "lsneakersuploadassets";
   const cloud_name = "dj2v5y8li";
-  
+
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -17,15 +18,50 @@ function EditProduct({ productId }) {
     onSale: false,
     imageUrls: [],
   });
+
   const [loading, setLoading] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
 
   useEffect(() => {
     const foundProduct = products.find((p) => p._id === productId);
     if (foundProduct) {
-      setProductData({ ...foundProduct, sizes: foundProduct.sizes || [] });
+      setProductData({
+        ...foundProduct,
+        sizes: foundProduct.sizes || [],
+      });
     }
   }, [productId, products]);
+
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    const numericValue = value.toString().replace(/\D/g, ""); // Quita caracteres no numéricos
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    }).format(numericValue);
+  };
+
+  const handlePriceChange = (e) => {
+    const { name, value } = e.target;
+    const numericValue = value.replace(/\D/g, ""); // Solo números
+    setProductData((prev) => ({
+      ...prev,
+      [name]: numericValue, // Guardar sin formato
+      [`${name}Formatted`]: formatCurrency(numericValue), // Mostrar formateado
+    }));
+  };
+
+  const handleSizeChange = (e) => {
+    const { value, checked } = e.target;
+    setProductData((prev) => {
+      const newSizes = checked
+        ? [...prev.sizes, value] // Agregar talla si está seleccionada
+        : prev.sizes.filter((size) => size !== value); // Quitar talla si se deselecciona
+  
+      return { ...prev, sizes: newSizes };
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,52 +71,13 @@ function EditProduct({ productId }) {
     }));
   };
 
-  const handleSizeChange = (e) => {
-    const { value, checked } = e.target;
-    setProductData((prev) => ({
-      ...prev,
-      sizes: checked ? [...prev.sizes, value] : prev.sizes.filter((size) => size !== value),
-    }));
-  };
-
-  const uploadImages = async (e) => {
-    const files = e.target.files;
-    const uploadedImages = [];
-
-    setLoading(true);
-    for (const file of files) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", preset_name);
-
-      try {
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
-          method: "POST",
-          body: data,
-        });
-
-        const fileData = await response.json();
-        uploadedImages.push(fileData.secure_url);
-      } catch (error) {
-        console.error("Error al subir la imagen:", error);
-      }
-    }
-    setProductData((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, ...uploadedImages] }));
-    setLoading(false);
-  };
-
-  // Marcar imágenes para eliminar en lugar de eliminarlas directamente
-  const removeImage = (index) => {
-    const imageToRemove = productData.imageUrls[index];
-    setDeletedImages((prev) => [...prev, imageToRemove]);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Excluir imágenes que fueron marcadas para eliminar antes de enviar la actualización
     const updatedProductData = {
       ...productData,
+      price: productData.price, // Sin formato
+      discountPrice: productData.discountPrice, // Sin formato
       imageUrls: productData.imageUrls.filter((img) => !deletedImages.includes(img)),
     };
 
@@ -95,7 +92,7 @@ function EditProduct({ productId }) {
 
       alert("Producto actualizado con éxito");
       updateProduct(updatedProductData);
-      setDeletedImages([]); // Limpiar la lista de imágenes eliminadas después de guardar
+      setDeletedImages([]);
     } catch (error) {
       console.error(error);
       alert("Hubo un error al actualizar el producto");
@@ -103,12 +100,6 @@ function EditProduct({ productId }) {
   };
 
   if (!productData.name) return <p>Cargando producto...</p>;
-
-  const sizesByGender = {
-    Hombre: ["36 HOMBRE", "37 HOMBRE", "38 HOMBRE", "39 HOMBRE", "40 HOMBRE", "41 HOMBRE"],
-    Mujer: ["36 MUJER", "37 MUJER", "38 MUJER"],
-    Unisex: ["36 MUJER", "37 MUJER", "38 MUJER", "36 HOMBRE", "37 HOMBRE", "38 HOMBRE"],
-  };
 
   return (
     <div className="edit-product-container">
@@ -121,37 +112,50 @@ function EditProduct({ productId }) {
 
         <label>
           Precio:
-          <input type="number" name="price" value={productData.price} onChange={handleChange} />
+          <input
+            type="text"
+            name="price"
+            value={productData.priceFormatted || ""}
+            onChange={handlePriceChange}
+          />
         </label>
-
-        <label>
-          En Oferta:
-          <input type="checkbox" name="onSale" checked={productData.onSale} onChange={handleChange} />
-        </label>
+        
+        <div>
+          <label>¿En promoción?</label>
+          <label className="switch">
+            <input type="checkbox" name="onSale" checked={productData.onSale} onChange={handleChange} />
+            <span className="slider round"></span>
+          </label>
+        </div>        
 
         <label>
           Precio con descuento:
           <input
-            type="number"
+            type="text"
             name="discountPrice"
-            value={productData.discountPrice}
-            onChange={handleChange}
+            value={productData.discountPriceFormatted || ""}
+            onChange={handlePriceChange}
             disabled={!productData.onSale}
           />
         </label>
 
         <label>
           Marca:
-          <input type="text" name="branch" value={productData.branch} onChange={handleChange} />
+          <select name="branch" value={productData.branch} onChange={handleChange}>
+            <option value="">Seleccione una marca</option>
+            {BRANDS.map((brand) => (
+              <option key={brand} value={brand}>{brand}</option>
+            ))}
+          </select>
         </label>
 
         <label>
           Género:
           <select name="gender" value={productData.gender} onChange={handleChange}>
             <option value="">Seleccione el género</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-            <option value="Unisex">Unisex</option>
+            {genders.map((gender) => (
+              <option key={gender} value={gender}>{gender}</option>
+            ))}
           </select>
         </label>
 
@@ -183,18 +187,12 @@ function EditProduct({ productId }) {
                 className={`image-item ${deletedImages.includes(img) ? "marked-for-deletion" : ""}`}
               >
                 <img src={img} alt={`Imagen ${index + 1}`} />
-                <button className="delete-button" type="button" onClick={() => removeImage(index)}>
+                <button className="delete-button" type="button" onClick={() => setDeletedImages([...deletedImages, img])}>
                   X
                 </button>
               </div>
             ))}
           </div>
-        </label>
-
-        <label>
-          Subir nuevas imágenes:
-          <input type="file" multiple onChange={uploadImages} />
-          {loading && <p>Subiendo imágenes...</p>}
         </label>
 
         <button type="submit" className="submit-button">

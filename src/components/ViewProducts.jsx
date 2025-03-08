@@ -63,7 +63,7 @@ function ViewProducts() {
               <img src={product.imageUrls[0]} alt={product.name} />
               <h3>{product.name}</h3>
               <p>Precio: ${product.price}</p>
-              <p className="category">Categoría: {product.branch}</p>
+              <p className="category">Marca: {product.branch}</p>
               <div className="button-group">
                 <Link to={`/update-product/${product._id}`}>
                   <button className="edit-btn">Editar</button>

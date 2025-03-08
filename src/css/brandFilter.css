@@ -1,16 +1,37 @@
-.filter-container select{
-    width: 250px;
+.filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
 }
 
-.filter-label{
+.filter-container select {
+    width: 250px;
+    padding: 12px;
+    border: 2px solid #e11d48; /* Borde con color principal */
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: white;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container select:hover {
+    border-color: #d10c3f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.filter-container select:focus {
+    border-color: #b50a34;
+    box-shadow: 0 0 5px rgba(225, 29, 72, 0.5);
+}
+
+.filter-label {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 0;
-    margin-top: 16px;
-    color: black;
+    color: #222;
 }

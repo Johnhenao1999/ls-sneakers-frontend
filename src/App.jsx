@@ -5,14 +5,15 @@ import ProductsGentlemen from "./pages/ProductsGentlemen";
 import PageDescriptionProduct from "./pages/PageDescriptionProduct";
 import ProductsLadies from "./pages/ProductsLadies";
 import AdminPanel from "./pages/AdminPanel";
+import ProductsChildren from "./pages/ProductsChildren";
 import ProductsPromotions from "./pages/Promotions";
 import PageViewProducts from "./pages/PageViewProducts";
-import { ProductsProvider } from "./ProductsContext"; // Importa el contexto
+import { ProductsProvider } from "./ProductsContext";
 import PageEditProduct from "./pages/PageEditProduct";
-import { Analytics } from "@vercel/analytics/react"; // Importa Analytics
+import { Analytics } from "@vercel/analytics/react";
 import AdminHome from "./pages/AdminHome";
 import AdminLogin from "./pages/AdminLogin";
-import { AuthProvider, useAuth } from "./AuthContext"; // Importa autenticación
+import { AuthProvider, useAuth } from "./AuthContext";
 
 // 🔒 Componente para proteger rutas privadas
 const PrivateRoute = () => {
@@ -22,13 +23,14 @@ const PrivateRoute = () => {
 
 function App() {
     return (
-        <AuthProvider> {/* Envuelve toda la app con el AuthProvider */}
-            <ProductsProvider> {/* Envolver también con el contexto de productos */}
+        <AuthProvider>
+            <ProductsProvider>
                 <Router>
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/collections/hombre" element={<ProductsGentlemen />} />
                         <Route path="/collections/mujer" element={<ProductsLadies />} />
+                        <Route path="/collections/ninos" element={<ProductsChildren />} />
                         <Route path="/collections/promociones" element={<ProductsPromotions />} />
                         <Route
                             path="/collections/:category/:productName"
@@ -45,7 +47,7 @@ function App() {
                         </Route>
                     </Routes>
                 </Router>
-                <Analytics /> {/* Mantén Analytics en toda la app */}
+                <Analytics />
             </ProductsProvider>
         </AuthProvider>
     );

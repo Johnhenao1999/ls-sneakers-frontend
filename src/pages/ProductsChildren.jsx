@@ -5,25 +5,23 @@ import BrandFilter from '../components/BrandFilter';
 import { BRANDS } from '../constans.js';
 import Footer from '../components/Footer';
 
-function ProducstGentlemen() {
+function ProductsChildren() {
     const [selectedBrand, setSelectedBrand] = useState('');
 
     return (
         <div className="app-container">
             <Header />
-
-            {/* Filtro de Marca */}
             <div className='section-container section-gender'>
                 <div>
-                    <p className='heading-title'>ZAPATOS PARA HOMBRE</p>
+                    <p className='heading-title'>ZAPATOS PARA NIÑOS</p>
                     <p className='subtitle-section-gender'>Amplio catalogo de zapatos de diferentes marcas con los mejores diseños.</p>
                 </div>
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
-            <ProductsGrid category="hombres" selectedBrand={selectedBrand} />
+            <ProductsGrid category="ninos" selectedBrand={selectedBrand} />
             <Footer />
         </div>
     );
 }
 
-export default ProducstGentlemen;
+export default ProductsChildren;

@@ -19,8 +19,8 @@ function DescriptionProduct() {
             return;
         }
 
-        const phoneNumber = '3126818082';
-        const message = `Hola, me interesa el ${product.name} con la talla ${selectedSize}, me podrías regalar más información?`;
+        const phoneNumber = '3162372548';
+        const message = `Hola, estoy interesado en el modelo ${product.name} en la talla ${selectedSize}. ¿Podrías brindarme más información sobre disponibilidad y detalles del producto? Quedo atento. ¡Gracias!`;
         const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappURL, '_blank');
     };
@@ -61,7 +61,10 @@ function DescriptionProduct() {
 
                 {/* Información del producto */}
                 <div className="product-info">
-                    <h1>{product.name}</h1>
+                    <div>
+                        <h1>{product.name}</h1>
+                        <p>{product.branch} | {product.gender}</p>
+                    </div>
                     <div>
                         {product.onSale && formattedDiscountPrice ? (
                             <p className="product-discount-price">{formattedDiscountPrice}</p>

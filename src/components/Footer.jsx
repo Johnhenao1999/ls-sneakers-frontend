@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../css/footer.css"; // Importa los estilos
+import "../css/footer.css";
+import logo from "../assets/logo-lsneackers.jpg";
 
 const Footer = () => {
   const [openSection, setOpenSection] = useState(null);
@@ -26,7 +27,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h2 className="footer-logo">🛍️ LSNEAKERS</h2>
+          <img className="footer-logo" src={logo} alt="" />
           <p className="footer-description">
             Tu tienda de confianza para encontrar los mejores zapatos para toda la familia.
           </p>
