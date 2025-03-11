@@ -28,9 +28,12 @@ function EditProduct({ productId }) {
       setProductData({
         ...foundProduct,
         sizes: foundProduct.sizes || [],
+        priceFormatted: formatCurrency(foundProduct.price),  // Agregar formato
+        discountPriceFormatted: foundProduct.discountPrice ? formatCurrency(foundProduct.discountPrice) : "", 
       });
     }
   }, [productId, products]);
+  
 
   const formatCurrency = (value) => {
     if (!value) return "";
@@ -49,7 +52,7 @@ function EditProduct({ productId }) {
       ...prev,
       [name]: numericValue, // Guardar sin formato
       [`${name}Formatted`]: formatCurrency(numericValue), // Mostrar formateado
-    }));
+    }));    
   };
 
   const handleSizeChange = (e) => {
