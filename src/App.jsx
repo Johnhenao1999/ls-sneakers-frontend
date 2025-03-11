@@ -16,14 +16,15 @@ import AdminLogin from "./pages/AdminLogin";
 import { AuthProvider, useAuth } from "./AuthContext";
 
 // 🔒 Componente para proteger rutas privadas
+/*
 const PrivateRoute = () => {
     const { token } = useAuth();
     return token ? <Outlet /> : <Navigate to="/admin/login" />;
 };
+*/
 
 function App() {
     return (
-        <AuthProvider>
             <ProductsProvider>
                 <Router>
                     <Routes>
@@ -39,17 +40,14 @@ function App() {
                         <Route path="/admin-login" element={<AdminLogin />} />
 
                         {/* 🔒 Rutas protegidas por autenticación */}
-                        <Route element={<PrivateRoute />}>
-                            <Route path="/admin" element={<AdminHome />} />
-                            <Route path="/add-product" element={<AdminPanel />} />
-                            <Route path="/update-products" element={<PageViewProducts />} />
-                            <Route path="/update-product/:id" element={<PageEditProduct />} />
-                        </Route>
+                        <Route path="/admin" element={<AdminHome />} />
+                        <Route path="/add-product" element={<AdminPanel />} />
+                        <Route path="/update-products" element={<PageViewProducts />} />
+                        <Route path="/update-product/:id" element={<PageEditProduct />} />
                     </Routes>
                 </Router>
                 <Analytics />
             </ProductsProvider>
-        </AuthProvider>
     );
 }
 
