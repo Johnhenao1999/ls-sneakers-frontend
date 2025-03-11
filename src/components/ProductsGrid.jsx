@@ -9,12 +9,10 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
 
   const filteredProducts = (customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-    (
-      Array.isArray(category)
-        ? category.includes(product.gender)
-        : product.gender === category
-    )
+    (category === "promotion" ||  // Si es "promotion", no filtrar por gender
+      (Array.isArray(category) ? category.includes(product.gender) : product.gender === category))
   )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
 
   const getProductCategory = (product, category) => {
     if (Array.isArray(category)) {
