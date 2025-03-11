@@ -19,15 +19,13 @@ function HomePage() {
     }))
     .sort((a, b) => a.discountPrice - b.discountPrice); // Ordenar por menor precio
 
-  console.log('Productos en promoción:', promotionProducts); 
-
   return (
     <div className="app-container">
       <Header />
       <BannerHero />
       <div>
         <h1 className='title-principal'>Nuestros productos</h1>
-        <ProductsGrid category="all" maxItems={8} />
+        <ProductsGrid category={["Hombre", "Unisex", "Mujer", "Niños"]} maxItems={8} />
       </div>
       
       {promotionProducts.length > 0 && (

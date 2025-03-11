@@ -18,7 +18,7 @@ function ProductsChildren() {
                 </div>
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
-            <ProductsGrid category="ninos" selectedBrand={selectedBrand} />
+            <ProductsGrid category="Niños" selectedBrand={selectedBrand} />
             <Footer />
         </div>
     );

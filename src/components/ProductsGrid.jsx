@@ -7,13 +7,16 @@ import '../css/productsGrid.css';
 function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProducts }) {
   const { products } = useProducts(); // Obtener productos desde el contexto
 
-  const filteredProducts = customProducts || products.filter(product =>
+  const filteredProducts = (customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-    (category === "hombres" ? product.gender === "Hombre" :
-      category === "mujer" ? product.gender === "Mujer" :
-        category === "ninos" ? product.gender === "Niños" :
-          true)
-  );
+    (
+      Array.isArray(category) 
+        ? category.includes(product.gender)
+        : product.gender === category
+    )
+  )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  
 
   const finalProducts = selectedBrand
     ? filteredProducts.filter(product => product.branch === selectedBrand)

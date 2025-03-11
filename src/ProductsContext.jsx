@@ -13,7 +13,6 @@ const getCachedProducts = () => {
     const { products, timestamp } = JSON.parse(cachedData);
     if (Date.now() - timestamp < CACHE_TIME) {
       console.log("✅ Usando datos en caché");
-console.log(cachedData)
       return products;
     }
   }
@@ -41,7 +40,7 @@ const ProductsProvider = ({ children }) => {
       if (!response.ok) throw new Error("Error al obtener los productos");
 
       const data = await response.json();
-      console.log("✅ Productos obtenidos:", data); 
+      console.log("✅ Productos obtenidos:", data);
       setProducts(data);
       saveProductsToCache(data);
     } catch (error) {

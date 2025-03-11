@@ -10,7 +10,15 @@ export const BRANDS = [
   'Gucci', 
   'Prada', 
   'Off-White', 
-  'Naked Wolfe'
+  'Naked Wolfe',
+  'Jordan',
+  'Calvin Klein',
+  'Hugo Boss',
+  'Coach',
+  'Diesel',
+  'Lacoste',
+  'Lecoq Sportif',
+  'Tommy Hilfiger'
 ];
 export const sizesByGender = {
   Hombre: ['40 EUR - H', '41 EUR - H', '42 EUR - H', '43 EUR - H', '44 EUR - H'],

@@ -17,7 +17,7 @@ function ProducstLadies() {
                 </div>
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
-            <ProductsGrid category="mujer" selectedBrand={selectedBrand}/>
+            <ProductsGrid category={["Mujer", "Unisex"]} selectedBrand={selectedBrand} />
             <Footer />
         </div>
     );

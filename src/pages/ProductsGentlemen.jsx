@@ -20,7 +20,7 @@ function ProducstGentlemen() {
                 </div>
                 <BrandFilter brands={BRANDS} selectedBrand={selectedBrand} setSelectedBrand={setSelectedBrand} />
             </div>
-            <ProductsGrid category="hombres" selectedBrand={selectedBrand} />
+            <ProductsGrid category={["Hombre", "Unisex"]} selectedBrand={selectedBrand} />
             <Footer />
         </div>
     );

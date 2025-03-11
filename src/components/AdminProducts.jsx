@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BRANDS, sizesByGender, genders } from '../constans.js';
 import "../css/adminpanel.css";
 import { useProducts } from "../ProductsContext.jsx";
+import Select from "react-select";
 
 const AddProducts = () => {
   const preset_name = 'lsneakersuploadassets';
@@ -22,6 +23,8 @@ const AddProducts = () => {
     sizes: [],
     onSale: false,
   });
+
+  const brandOptions = BRANDS.map((brand) => ({ label: brand, value: brand }));
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -167,14 +170,15 @@ const AddProducts = () => {
 
         <div className="form-group">
           <label>Marca:</label>
-          <select name="branch" value={formData.branch} onChange={handleInputChange} required>
-            <option value="">Seleccione una categoría</option>
-            {BRANDS.map((branch) => (
-              <option key={branch} value={branch}>
-                {branch}
-              </option>
-            ))}
-          </select>
+          <Select
+            options={brandOptions}
+            value={brandOptions.find((option) => option.value === formData.branch)}
+            onChange={(selectedOption) =>
+              handleInputChange({ target: { name: "branch", value: selectedOption.value } })
+            }
+            isSearchable
+            placeholder="Seleccione una marca..."
+          />
         </div>
 
         <div className="form-group">
