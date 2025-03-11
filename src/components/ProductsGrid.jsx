@@ -10,21 +10,36 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
   const filteredProducts = (customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
     (
-      Array.isArray(category) 
+      Array.isArray(category)
         ? category.includes(product.gender)
         : product.gender === category
     )
   )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
-  
+
+  const getProductCategory = (product, category) => {
+    if (Array.isArray(category)) {
+      const matchedCategory = category.find(cat => cat === product.gender) || category[0];
+      return toSlug(matchedCategory);
+    }
+    return toSlug(category);
+  };
+
+  const toSlug = (text) => {
+    return text
+      .toLowerCase() // Convierte a minúsculas
+      .normalize('NFD') // Normaliza caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, '') // Elimina tildes y diacríticos
+      .replace(/\s+/g, '-') // Reemplaza espacios con guiones
+      .replace(/[^a-z0-9-]/g, '') // Elimina caracteres especiales
+      .replace(/-+/g, '-'); // Evita múltiples guiones seguidos
+  };
+
 
   const finalProducts = selectedBrand
     ? filteredProducts.filter(product => product.branch === selectedBrand)
     : filteredProducts;
 
   const displayedProducts = maxItems ? finalProducts.slice(0, maxItems) : finalProducts;
-
-  const toSlug = (name) => name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
 
   return (
     <section className="product-grid">
@@ -33,7 +48,7 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
           displayedProducts.map((product) => (
             <Link
               key={product._id}
-              to={`/collections/${category}/${toSlug(product.name)}`}
+              to={`/collections/${getProductCategory(product, category)}/${toSlug(product.name)}`}
               state={{ product }}
               className="product-card-link"
             >
