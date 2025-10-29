@@ -43,6 +43,10 @@
   font-style: oblique;
 }
 
+.admin-panel{
+  display: flex;
+}
+
 @media (max-width: 1024px) {
   .title-principal {
     padding: 16px;

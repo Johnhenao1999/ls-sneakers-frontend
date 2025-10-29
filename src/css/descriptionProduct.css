@@ -38,7 +38,8 @@
     display: flex;
     gap: 10px;
     margin-top: 10px;
-    overflow-x: auto; /* Scroll horizontal */
+    overflow-x: auto;
+    /* Scroll horizontal */
     max-width: 100%;
     padding-bottom: 10px;
 }
@@ -59,7 +60,8 @@
 }
 
 .thumbnail {
-    flex: 0 0 auto; /* Mantiene el tamaño de cada miniatura */
+    flex: 0 0 auto;
+    /* Mantiene el tamaño de cada miniatura */
     width: 60px;
     height: 60px;
     object-fit: cover;
@@ -69,7 +71,8 @@
     transition: transform 0.3s, border 0.3s;
 }
 
-.thumbnail:hover, .thumbnail.active {
+.thumbnail:hover,
+.thumbnail.active {
     border: 2px solid #007bff;
 }
 
@@ -132,7 +135,8 @@
     transition: background 0.3s, border 0.3s;
 }
 
-.size-button:hover, .size-button.selected {
+.size-button:hover,
+.size-button.selected {
     background-color: #e11d48;
     color: white;
 }
@@ -152,6 +156,49 @@
 
 .add-to-cart:hover {
     background-color: #bb1b3e;
+}
+
+/* === BOTONES DE ACCIÓN (Agregar al carrito / Me interesa) === */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.add-to-cart,
+.whatsapp-btn {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Botón de carrito */
+.add-to-cart {
+    background-color: #e11d48;
+    color: #fff;
+}
+
+.add-to-cart:hover {
+    background-color: #bb1b3e;
+    transform: translateY(-1px);
+}
+
+/* Botón de WhatsApp */
+.whatsapp-btn {
+    background-color: #25d366;
+    color: #fff;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d;
+    transform: translateY(-1px);
 }
 
 /* Responsive */
@@ -174,5 +221,15 @@
     .add-to-cart {
         align-self: center;
         width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .add-to-cart,
+    .whatsapp-btn {
+        width: 100%;
+        text-align: center;
     }
 }

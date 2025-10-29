@@ -1,0 +1,251 @@
+/* 🔸 Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* 🔸 Contenedor del modal */
+.order-modal-detail {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  overflow: hidden; /* evita scroll detrás del header */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translate(-50%, -45%) scale(0.98);
+    opacity: 0.8;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 🔸 Header */
+.modal-header-detail {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: #fff;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+
+/* sombra visible al hacer scroll */
+.modal-body-detail.scrolled ~ .modal-header-detail,
+.modal-header-detail.active-shadow {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.modal-header-detail h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #111;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #444;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg);
+  color: #000;
+}
+
+/* 🔸 Cuerpo del modal */
+.modal-body-detail {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1; /* el cuerpo es lo que scrollea */
+  color: #222;
+}
+
+/* Secciones */
+.order-section {
+  margin-top: 1.2rem;
+}
+
+.order-section h4 {
+  margin-bottom: 8px;
+  color: #111;
+  font-size: 1.1rem;
+}
+
+.order-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+/* 🔸 Tabla (solo desktop) */
+.products-table-wrapper {
+  display: block;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.products-table th,
+.products-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+.products-table th {
+  background: #111;
+  color: #fff;
+  font-weight: 500;
+}
+
+.product-thumb {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* 🔸 Cards (solo mobile) */
+.products-list {
+  display: none;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.product-info h5 {
+  margin: 8px 0 4px;
+  font-size: 1rem;
+  color: #111;
+}
+
+.product-info p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.subtotal {
+  font-weight: 600;
+  color: #000;
+}
+
+/* 🔸 Total */
+.total-box {
+  text-align: right;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #000;
+  margin-top: 15px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+
+/* 🔸 Mobile fullscreen */
+@media (max-width: 768px) {
+  .order-modal-detail {
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 100vh;
+    max-width: none;
+    border-radius: 0;
+    animation: slideUp 0.3s ease;
+    max-height: none;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .modal-header-detail {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    z-index: 50;
+  }
+
+  .modal-body-detail {
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+
+  /* Ocultar tabla */
+  .products-table-wrapper {
+    display: none;
+  }
+
+  /* Mostrar cards */
+  .products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .total-box {
+    text-align: center;
+  }
+}

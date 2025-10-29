@@ -12,7 +12,9 @@ import PageEditProduct from "./pages/PageEditProduct";
 import { Analytics } from "@vercel/analytics/react";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminLogin from "./pages/admin/AdminLogin";
+import Orders from "./pages/admin/Orders/Orders";
 import { AuthProvider, useAuth } from "./AuthContext";
+import { CartProvider } from "./context/CartContext";
 
 // 🔒 Rutas protegidas
 const PrivateRoute = () => {
@@ -23,31 +25,34 @@ const PrivateRoute = () => {
 function App() {
   return (
     <AuthProvider> {/* 👈 Ahora el contexto está disponible */}
-      <ProductsProvider>
-        <Router>
-          <Routes>
-            {/* 🏠 Rutas públicas */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/collections/hombre" element={<ProductsGentlemen />} />
-            <Route path="/collections/mujer" element={<ProductsLadies />} />
-            <Route path="/collections/ninos" element={<ProductsChildren />} />
-            <Route path="/collections/promociones" element={<ProductsPromotions />} />
-            <Route
-              path="/collections/:category/:productName"
-              element={<PageDescriptionProduct />}
-            />
-            <Route path="/login" element={<AdminLogin />} />
+      <CartProvider>
+        <ProductsProvider>
+          <Router>
+            <Routes>
+              {/* 🏠 Rutas públicas */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/collections/hombre" element={<ProductsGentlemen />} />
+              <Route path="/collections/mujer" element={<ProductsLadies />} />
+              <Route path="/collections/ninos" element={<ProductsChildren />} />
+              <Route path="/collections/promociones" element={<ProductsPromotions />} />
+              <Route
+                path="/collections/:category/:productName"
+                element={<PageDescriptionProduct />}
+              />
+              <Route path="/login" element={<AdminLogin />} />
 
-            {/* 🔒 Rutas protegidas */}
-            <Route element={<PrivateRoute />}>
-              <Route path="/add-product" element={<AdminPanel />} />
-              <Route path="/admin" element={<AdminHome />} />
-              <Route path="/update-product/:id" element={<PageEditProduct />} />
-            </Route>
-          </Routes>
-        </Router>
-        <Analytics />
-      </ProductsProvider>
+              {/* 🔒 Rutas protegidas */}
+              <Route element={<PrivateRoute />}>
+                <Route path="/add-product" element={<AdminPanel />} />
+                <Route path="/admin" element={<AdminHome />} />
+                <Route path="/admin/orders" element={<Orders />} />
+                <Route path="/update-product/:id" element={<PageEditProduct />} />
+              </Route>
+            </Routes>
+          </Router>
+          <Analytics />
+        </ProductsProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

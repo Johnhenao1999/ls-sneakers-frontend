@@ -4,7 +4,7 @@ const ProductsContext = createContext(null);
 
 const CACHE_KEY = "cachedProducts";
 const CACHE_TIME = 30 * 60 * 1000;
-const API_URL = "http://localhost:3000/api/products";
+const API_URL = "https://ls-sneakers-backend.vercel.app/api/products";
 
 // Obtener productos de la caché
 const getCachedProducts = () => {
