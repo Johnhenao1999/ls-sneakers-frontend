@@ -1,4 +1,3 @@
-import React from 'react';
 import AddProducts from '../components/AdminProducts';
 
 function AdminPanel() {

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../../AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../css/adminlogin.css";
+import "../../css/adminlogin.css";
 
 function AdminLogin() {
   const { login } = useAuth();
@@ -12,9 +12,13 @@ function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
-      await login(username, password);
-      navigate("/admin"); // Redirige al dashboard si el login es exitoso
+      const ok = await login(username, password);
+      if (ok) {
+        navigate("/admin"); // ✅ solo navega si login fue exitoso
+      }
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
     }

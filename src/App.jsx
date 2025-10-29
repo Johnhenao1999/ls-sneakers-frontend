@@ -7,48 +7,49 @@ import ProductsLadies from "./pages/ProductsLadies";
 import AdminPanel from "./pages/AdminPanel";
 import ProductsChildren from "./pages/ProductsChildren";
 import ProductsPromotions from "./pages/Promotions";
-import PageViewProducts from "./pages/PageViewProducts";
 import { ProductsProvider } from "./ProductsContext";
 import PageEditProduct from "./pages/PageEditProduct";
 import { Analytics } from "@vercel/analytics/react";
-import AdminHome from "./pages/AdminHome";
-import AdminLogin from "./pages/AdminLogin";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminLogin from "./pages/admin/AdminLogin";
 import { AuthProvider, useAuth } from "./AuthContext";
 
-// 🔒 Componente para proteger rutas privadas
-/*
+// 🔒 Rutas protegidas
 const PrivateRoute = () => {
-    const { token } = useAuth();
-    return token ? <Outlet /> : <Navigate to="/admin/login" />;
+  const { user } = useAuth(); // o token, según cómo lo manejes en AuthContext
+  return user ? <Outlet /> : <Navigate to="/login" />;
 };
-*/
 
 function App() {
-    return (
-            <ProductsProvider>
-                <Router>
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/collections/hombre" element={<ProductsGentlemen />} />
-                        <Route path="/collections/mujer" element={<ProductsLadies />} />
-                        <Route path="/collections/ninos" element={<ProductsChildren />} />
-                        <Route path="/collections/promociones" element={<ProductsPromotions />} />
-                        <Route
-                            path="/collections/:category/:productName"
-                            element={<PageDescriptionProduct />}
-                        />
-                        <Route path="/admin-login" element={<AdminLogin />} />
+  return (
+    <AuthProvider> {/* 👈 Ahora el contexto está disponible */}
+      <ProductsProvider>
+        <Router>
+          <Routes>
+            {/* 🏠 Rutas públicas */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/collections/hombre" element={<ProductsGentlemen />} />
+            <Route path="/collections/mujer" element={<ProductsLadies />} />
+            <Route path="/collections/ninos" element={<ProductsChildren />} />
+            <Route path="/collections/promociones" element={<ProductsPromotions />} />
+            <Route
+              path="/collections/:category/:productName"
+              element={<PageDescriptionProduct />}
+            />
+            <Route path="/login" element={<AdminLogin />} />
 
-                        {/* 🔒 Rutas protegidas por autenticación */}
-                        <Route path="/admin" element={<AdminHome />} />
-                        <Route path="/add-product" element={<AdminPanel />} />
-                        <Route path="/update-products" element={<PageViewProducts />} />
-                        <Route path="/update-product/:id" element={<PageEditProduct />} />
-                    </Routes>
-                </Router>
-                <Analytics />
-            </ProductsProvider>
-    );
+            {/* 🔒 Rutas protegidas */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/add-product" element={<AdminPanel />} />
+              <Route path="/admin" element={<AdminHome />} />
+              <Route path="/update-product/:id" element={<PageEditProduct />} />
+            </Route>
+          </Routes>
+        </Router>
+        <Analytics />
+      </ProductsProvider>
+    </AuthProvider>
+  );
 }
 
 export default App;
