@@ -1,43 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import { useProducts } from '../ProductsContext'; // Importar el contexto
+import { useProducts } from '../ProductsContext';
 import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProducts }) {
-  const { products } = useProducts(); // Obtener productos desde el contexto
+  const { products } = useProducts();
 
+  // 🔎 Filtrar productos según categoría o lista personalizada
   const filteredProducts = (customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-    (category === "promotion" ||  // Si es "promotion", no filtrar por gender
-      (Array.isArray(category) ? category.includes(product.gender) : product.gender === category))
+    (category === "promotion" ||
+      (Array.isArray(category)
+        ? category.includes(product.gender)
+        : product.gender === category))
   )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
 
-  const getProductCategory = (product, category) => {
-    if (Array.isArray(category)) {
-      const matchedCategory = category.find(cat => cat === product.gender) || category[0];
-      return toSlug(matchedCategory);
-    }
-    return toSlug(category);
-  };
-
-  const toSlug = (text) => {
-    return text
-      .toLowerCase() // Convierte a minúsculas
-      .normalize('NFD') // Normaliza caracteres acentuados
-      .replace(/[\u0300-\u036f]/g, '') // Elimina tildes y diacríticos
-      .replace(/\s+/g, '-') // Reemplaza espacios con guiones
-      .replace(/[^a-z0-9-]/g, '') // Elimina caracteres especiales
-      .replace(/-+/g, '-'); // Evita múltiples guiones seguidos
-  };
-
-
+  // 💡 Filtrar por marca si se seleccionó alguna
   const finalProducts = selectedBrand
     ? filteredProducts.filter(product => product.branch === selectedBrand)
     : filteredProducts;
 
+  // 🔢 Limitar cantidad si se pasó maxItems
   const displayedProducts = maxItems ? finalProducts.slice(0, maxItems) : finalProducts;
+
+  // 🧠 Determinar la categoría para el link (mantiene compatibilidad)
+  const getProductCategory = (product, category) => {
+    if (Array.isArray(category)) {
+      const matchedCategory = category.find(cat => cat === product.gender) || category[0];
+      return matchedCategory.toLowerCase();
+    }
+    return category.toLowerCase();
+  };
 
   return (
     <section className="product-grid">
@@ -46,8 +40,7 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
           displayedProducts.map((product) => (
             <Link
               key={product._id}
-              to={`/collections/${getProductCategory(product, category)}/${toSlug(product.name)}`}
-              state={{ product }}
+              to={`/collections/${getProductCategory(product, category)}/${product.slug}`}
               className="product-card-link"
             >
               <div className="product-card">
@@ -65,10 +58,11 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
 
 function ProductInView({ product }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
-  const [currentImage, setCurrentImage] = useState(product.imageUrls[0]); // Imagen inicial
+  const [currentImage, setCurrentImage] = useState(product.imageUrls[0]);
   const imageIndexRef = useRef(0);
   const intervalRef = useRef(null);
 
+  // 💰 Formatos de precio
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -77,19 +71,21 @@ function ProductInView({ product }) {
 
   const formattedDiscountPrice = product.discountPrice
     ? new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0,
-    }).format(product.discountPrice)
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+      }).format(product.discountPrice)
     : null;
 
+  // 🎞️ Cambio automático de imágenes al hover
   const startImageRotation = () => {
     if (product.imageUrls.length > 1) {
       clearInterval(intervalRef.current);
       imageIndexRef.current = 1;
       setCurrentImage(product.imageUrls[1]);
       intervalRef.current = setInterval(() => {
-        imageIndexRef.current = (imageIndexRef.current + 1) % product.imageUrls.length;
+        imageIndexRef.current =
+          (imageIndexRef.current + 1) % product.imageUrls.length;
         setCurrentImage(product.imageUrls[imageIndexRef.current]);
       }, 1000);
     }
@@ -118,17 +114,23 @@ function ProductInView({ product }) {
         {product.onSale && <div className="offer-badge">Oferta</div>}
         <img src={currentImage} alt={product.name} />
       </div>
-      <div className='product-card-price-container'>
-        {product.onSale && formattedDiscountPrice ? (
+
+      <div className="product-card-price-container">
+        {product.onSale && formattedDiscountPrice && (
           <p className="product-discount-price-grid">{formattedDiscountPrice}</p>
-        ) : null}
-        <p className={`product-price-grid ${product.onSale ? 'price-strikethrough-grid' : ''}`}>
+        )}
+        <p
+          className={`product-price-grid ${
+            product.onSale ? 'price-strikethrough-grid' : ''
+          }`}
+        >
           {formattedPrice}
         </p>
       </div>
-      <div className='product-card-content'>
+
+      <div className="product-card-content">
         <h3>{product.name}</h3>
-        <h3 className='product-card-branch'>{product.branch}</h3>
+        <h3 className="product-card-branch">{product.branch}</h3>
       </div>
     </div>
   );
