@@ -1,40 +1,63 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import "../css/descriptionProduct.css";
 import { useCart } from "../context/CartContext";
+import { useProducts } from "../ProductsContext";
 
 function DescriptionProduct() {
   const location = useLocation();
-  const { product } = location.state || {}; // Recupera el producto desde el state
-  const { addToCart, setIsCartOpen } = useCart(); // Contexto del carrito
+  const { category, productName } = useParams();
+  const { products } = useProducts();
+  const { addToCart, setIsCartOpen } = useCart();
 
-  const [selectedSize, setSelectedSize] = useState(product?.sizes[0] || null);
-  const [selectedImage, setSelectedImage] = useState(
-    product?.imageUrls[0] || ""
-  );
+  const [product, setProduct] = useState(location.state?.product || null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
 
-  if (!product) {
-    return <p>Producto no encontrado</p>;
-  }
+  // ✅ Hook 1: Buscar producto si no viene del state
+  useEffect(() => {
+    if (!product && products.length > 0) {
+      const found = products.find(
+        (p) =>
+          p.slug === productName ||
+          p.name.toLowerCase() ===
+            decodeURIComponent(productName.toLowerCase())
+      );
+      if (found) {
+        setProduct(found);
+      }
+    }
+  }, [product, products, productName]);
 
-  // Formato de precios
-  const formattedPrice = new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    minimumFractionDigits: 0,
-  }).format(product.price);
+  // ✅ Hook 2: Inicializar talla e imagen al tener producto
+  useEffect(() => {
+    if (product) {
+      setSelectedSize(product.sizes?.[0] || null);
+      setSelectedImage(product.imageUrls?.[0] || "");
+    }
+  }, [product]);
 
-  const formattedDiscountPrice = product.discountPrice
-    ? new Intl.NumberFormat("es-CO", {
+  // 🪙 Formato de precios
+  const formattedPrice =
+    product &&
+    new Intl.NumberFormat("es-CO", {
       style: "currency",
       currency: "COP",
       minimumFractionDigits: 0,
-    }).format(product.discountPrice)
-    : null;
+    }).format(product.price);
 
-  // --- Función para agregar al carrito ---
+  const formattedDiscountPrice =
+    product && product.discountPrice
+      ? new Intl.NumberFormat("es-CO", {
+          style: "currency",
+          currency: "COP",
+          minimumFractionDigits: 0,
+        }).format(product.discountPrice)
+      : null;
+
+  // 🛒 Agregar al carrito
   const handleAddToCart = () => {
-    if (!selectedSize) {
+    if (!product || !selectedSize) {
       alert("Por favor selecciona una talla antes de agregar al carrito.");
       return;
     }
@@ -42,16 +65,16 @@ function DescriptionProduct() {
     addToCart({
       ...product,
       size: selectedSize,
-      imageSelected: selectedImage, // 👈 Guardamos la imagen elegida
+      imageSelected: selectedImage,
       quantity: 1,
     });
 
     setIsCartOpen(true);
   };
 
-  // --- Función para abrir WhatsApp ---
+  // 💬 WhatsApp
   const handleWhatsAppClick = () => {
-    if (!selectedSize) {
+    if (!product || !selectedSize) {
       alert("Por favor, selecciona una talla antes de continuar.");
       return;
     }
@@ -64,29 +87,35 @@ function DescriptionProduct() {
     window.open(whatsappURL, "_blank");
   };
 
+  // ⚠️ Ahora el return está después de todos los hooks (seguro)
+  if (!product) {
+    return <p>Producto no encontrado</p>;
+  }
+
   return (
     <div className="description-product">
       <div className="product-details">
-        {/* Imagen principal */}
+        {/* 🖼 Imagen principal */}
         <div className="product-image">
           <img src={selectedImage} alt={product.name} className="main-image" />
 
           {/* Miniaturas */}
           <div className="image-thumbnails">
-            {product.imageUrls.map((img, index) => (
+            {product.imageUrls?.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Vista ${index + 1}`}
-                className={`thumbnail ${selectedImage === img ? "active" : ""
-                  }`}
+                className={`thumbnail ${
+                  selectedImage === img ? "active" : ""
+                }`}
                 onClick={() => setSelectedImage(img)}
               />
             ))}
           </div>
         </div>
 
-        {/* Información del producto */}
+        {/* 📋 Información del producto */}
         <div className="product-info">
           <div>
             <h1>{product.name}</h1>
@@ -100,22 +129,24 @@ function DescriptionProduct() {
               <p className="product-discount-price">{formattedDiscountPrice}</p>
             ) : null}
             <p
-              className={`product-price ${product.onSale ? "price-strikethrough" : ""
-                }`}
+              className={`product-price ${
+                product.onSale ? "price-strikethrough" : ""
+              }`}
             >
               {formattedPrice}
             </p>
           </div>
 
-          {/* Tallas disponibles */}
+          {/* 👟 Tallas */}
           <div className="product-sizes">
             <p>Tallas disponibles:</p>
             <div className="sizes-container">
-              {product.sizes.map((size) => (
+              {product.sizes?.map((size) => (
                 <button
                   key={size}
-                  className={`size-button ${selectedSize === size ? "selected" : ""
-                    }`}
+                  className={`size-button ${
+                    selectedSize === size ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedSize(size)}
                 >
                   {size}
@@ -124,7 +155,7 @@ function DescriptionProduct() {
             </div>
           </div>
 
-          {/* Botones de acción */}
+          {/* 🛍 Botones */}
           <div className="action-buttons">
             <button className="add-to-cart" onClick={handleAddToCart}>
               Agregar al carrito

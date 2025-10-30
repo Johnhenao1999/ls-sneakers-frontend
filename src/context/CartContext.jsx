@@ -1,39 +1,64 @@
-// CartContext.jsx
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false); // 👈 nuevo estado
 
+  // 🧠 Cargar carrito desde localStorage al iniciar
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error("Error al cargar el carrito:", error);
+      }
+    }
+    setIsInitialized(true); // 👈 marca que ya cargó
+  }, []);
+
+  // 💾 Guardar carrito solo después de haber cargado
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems, isInitialized]);
+
+  // ➕ Agregar producto
   const addToCart = (newItem) => {
-    const existing = cartItems.find(
-      (item) => item._id === newItem._id && item.size === newItem.size
-    );
-
-    if (existing) {
-      setCartItems((prev) =>
-        prev.map((item) =>
+    setCartItems((prev) => {
+      const existing = prev.find(
+        (item) => item._id === newItem._id && item.size === newItem.size
+      );
+      if (existing) {
+        return prev.map((item) =>
           item._id === newItem._id && item.size === newItem.size
             ? { ...item, quantity: item.quantity + 1 }
             : item
-        )
-      );
-    } else {
-      setCartItems((prev) => [...prev, { ...newItem, quantity: 1 }]);
-    }
+        );
+      } else {
+        return [...prev, { ...newItem, quantity: 1 }];
+      }
+    });
   };
 
+  // ❌ Eliminar producto
   const removeFromCart = (productId, size) => {
     setCartItems((prev) =>
       prev.filter((item) => !(item._id === productId && item.size === size))
     );
   };
 
-  const clearCart = () => setCartItems([]);
+  // 🧹 Vaciar carrito
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
+  };
 
-  // 👇 Nueva función para aumentar cantidad
+  // 🔼 Aumentar cantidad
   const increaseQuantity = (productId, size) => {
     setCartItems((prev) =>
       prev.map((item) =>
@@ -44,16 +69,16 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // 👇 Nueva función para disminuir cantidad
+  // 🔽 Disminuir cantidad
   const decreaseQuantity = (productId, size) => {
     setCartItems((prev) =>
       prev
         .map((item) =>
           item._id === productId && item.size === size
-            ? { ...item, quantity: Math.max(item.quantity - 1, 1) } // nunca baja de 1
+            ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
             : item
         )
-        .filter((item) => item.quantity > 0) // elimina si llega a 0 (opcional)
+        .filter((item) => item.quantity > 0)
     );
   };
 
