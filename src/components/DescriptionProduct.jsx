@@ -45,6 +45,8 @@ function DescriptionProduct() {
       imageSelected: selectedImage, // 👈 Guardamos la imagen elegida
       quantity: 1,
     });
+
+    setIsCartOpen(true);
   };
 
   // --- Función para abrir WhatsApp ---
