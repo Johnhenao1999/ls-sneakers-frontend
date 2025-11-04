@@ -79,14 +79,14 @@ const AdminSidebar = () => {
           </Link>
 
           <Link
-            to="/categories"
+            to="/admin/brands"
             className={`sidebar-link ${
-              location.pathname === "/categories" ? "active" : ""
+              location.pathname === "/admin/brands" ? "active" : ""
             }`}
             onClick={() => isMobile && toggleSidebar()}
           >
             <Tags size={20} />
-            {isOpen && <span>Categorías</span>}
+            {isOpen && <span>Marcas</span>}
           </Link>
 
           <Link

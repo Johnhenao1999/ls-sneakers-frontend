@@ -1,0 +1,39 @@
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  min-height: 60vh;
+  width: 100%;
+}
+
+.loader-content {
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.loader-image {
+  width: 90px;
+  height: auto;
+  margin-bottom: 12px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loader-text {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-family: 'Inter', sans-serif;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.7; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

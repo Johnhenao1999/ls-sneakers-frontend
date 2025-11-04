@@ -13,6 +13,28 @@
     /* Transición suave para efectos */
 }
 
+.navbar-top{
+    background-color: #01627D;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 4px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.navbar-top a {
+  color: inherit;          /* Usa el mismo color del texto actual */
+  text-decoration: none;   /* Quita el subrayado si no lo quieres */
+}
+
+.navbar-top a:hover {
+  color: #e1306c;          /* Color de Instagram (opcional) */
+}
+
+.navbar-top a:visited {
+  color: inherit;          /* Evita el morado del enlace visitado */
+}
+
 /* Navbar Content */
 .navbar-content {
     display: flex;

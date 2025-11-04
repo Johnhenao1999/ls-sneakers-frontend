@@ -2,12 +2,27 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useProducts } from '../ProductsContext';
+import Loader from '../components/Loader';
 import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProducts }) {
   const { products } = useProducts();
+  const [loading, setLoading] = useState(true);
 
-  // 🔎 Filtrar productos según categoría o lista personalizada
+  // ⚙️ Configuración de paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12; // ✅ número de productos por página
+
+  // 🔄 Detectar carga de productos
+  useEffect(() => {
+    if (products && products.length > 0) {
+      setLoading(false);
+    }
+  }, [products]);
+
+  if (loading) return <Loader text="Cargando productos..." />;
+
+  // 🔎 Filtrado base
   const filteredProducts = (customProducts || products.filter(product =>
     (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
     (category === "promotion" ||
@@ -16,15 +31,17 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
         : product.gender === category))
   )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  // 💡 Filtrar por marca si se seleccionó alguna
+  // 💡 Filtro por marca
   const finalProducts = selectedBrand
     ? filteredProducts.filter(product => product.branch === selectedBrand)
     : filteredProducts;
 
-  // 🔢 Limitar cantidad si se pasó maxItems
-  const displayedProducts = maxItems ? finalProducts.slice(0, maxItems) : finalProducts;
+  // 🔢 Paginación
+  const totalPages = Math.ceil(finalProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedProducts = finalProducts.slice(startIndex, startIndex + itemsPerPage);
 
-  // 🧠 Determinar la categoría para el link (mantiene compatibilidad)
+  // 🧭 Determinar categoría para el link
   const getProductCategory = (product, category) => {
     if (Array.isArray(category)) {
       const matchedCategory = category.find(cat => cat === product.gender) || category[0];
@@ -32,6 +49,8 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
     }
     return category.toLowerCase();
   };
+
+  const handlePageChange = (page) => setCurrentPage(page);
 
   return (
     <section className="product-grid">
@@ -52,17 +71,46 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
           <p>No hay productos disponibles</p>
         )}
       </div>
+
+      {/* 🔘 Paginador */}
+      {totalPages > 1 && (
+        <div className="pagination-container">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            ←
+          </button>
+
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index + 1}
+              className={currentPage === index + 1 ? 'active' : ''}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            →
+          </button>
+        </div>
+      )}
     </section>
   );
 }
 
+// 💡 Subcomponente: mantiene tu lógica de animación de imágenes
 function ProductInView({ product }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const [currentImage, setCurrentImage] = useState(product.imageUrls[0]);
   const imageIndexRef = useRef(0);
   const intervalRef = useRef(null);
 
-  // 💰 Formatos de precio
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -77,7 +125,6 @@ function ProductInView({ product }) {
       }).format(product.discountPrice)
     : null;
 
-  // 🎞️ Cambio automático de imágenes al hover
   const startImageRotation = () => {
     if (product.imageUrls.length > 1) {
       clearInterval(intervalRef.current);

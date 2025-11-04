@@ -21,6 +21,10 @@ function Header() {
 
   return (
     <header className="navbar">
+      <div className="navbar-top">
+        Created by <strong>Luisa Solarte</strong> — <a href="https://www.instagram.com/lsneakers__/?igsh=MThkajEzdGdxZmNqZA%3D%3D" target="_blank">@lsneakers__</a>
+      </div>
+
       <div className={isMenuOpen ? "active-header" : "navbar-content"}>
         <button
           className={isMenuOpen ? "menu-toggle-active-header" : "menu-toggle"}
@@ -37,6 +41,7 @@ function Header() {
           <Link to="/"><img className="icons-menu" src={home} alt="" />INICIO</Link>
           <Link to="/collections/mujer"><img className="icons-menu" src={iconMujer} alt="" />MUJER</Link>
           <Link to="/collections/hombre"><img className="icons-menu" src={iconHombre} alt="" />HOMBRE</Link>
+          <Link to="/collections/guayos"><img className="icons-menu" src={iconNino} alt="" />GUAYOS</Link>
           <Link to="/collections/ninos"><img className="icons-menu" src={iconNino} alt="" />NIÑOS</Link>
           <Link to="/collections/promociones" className="promotions"><img className="icons-menu" src={promotion} alt="" />SALE</Link>
         </nav>
