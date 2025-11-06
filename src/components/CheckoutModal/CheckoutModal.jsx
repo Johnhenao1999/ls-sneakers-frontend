@@ -9,6 +9,8 @@ const CheckoutModal = ({ onClose }) => {
   const [ciudades, setCiudades] = useState([]);
   const [searchDepto, setSearchDepto] = useState("");
   const [searchCity, setSearchCity] = useState("");
+  const [showDeptos, setShowDeptos] = useState(false);
+  const [showCities, setShowCities] = useState(false);
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -106,33 +108,53 @@ const CheckoutModal = ({ onClose }) => {
           <input type="tel" name="celular" value={formData.celular} onChange={handleChange} required />
         </div>
 
-        {/* 🏙 Departamento con filtro */}
-        <div className="form-group">
+        {/* 🏙 Departamento */}
+        <div className="form-group relative">
           <label>Departamento</label>
           <input
             type="text"
             placeholder="Escribe o selecciona..."
             value={searchDepto || formData.departamento}
             onChange={(e) => {
-              setSearchDepto(e.target.value);
-              setFormData({ ...formData, departamento: e.target.value, ciudad: "" });
+              const value = e.target.value;
+              setSearchDepto(value);
+              setFormData({ ...formData, departamento: value, ciudad: "" });
             }}
-            list="departamentos-list"
+            onFocus={() => setShowDeptos(true)}   // ✅ abre al enfocar
+            onClick={() => setShowDeptos(true)}   // ✅ abre al hacer clic
+            onBlur={() => setTimeout(() => setShowDeptos(false), 150)} // 🔹 cierra después del click
             required
           />
-          <datalist id="departamentos-list">
-            {departamentos
-              .filter((d) =>
-                d.departamento.toLowerCase().includes(searchDepto.toLowerCase())
-              )
-              .map((d) => (
-                <option key={d.id} value={d.departamento} />
-              ))}
-          </datalist>
+
+          {showDeptos && (
+            <ul className="custom-list">
+              {departamentos
+                .filter((d) =>
+                  d.departamento.toLowerCase().includes(searchDepto.toLowerCase())
+                )
+                .map((d) => (
+                  <li
+                    key={d.id}
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        departamento: d.departamento,
+                        ciudad: "",
+                      });
+                      setSearchDepto(d.departamento);
+                      setShowDeptos(false);
+                      setCiudades(d.ciudades); // 🔹 carga las ciudades del depto
+                    }}
+                  >
+                    {d.departamento}
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
 
-        {/* 🌆 Ciudad filtrada */}
-        <div className="form-group">
+        {/* 🌆 Ciudad */}
+        <div className="form-group relative">
           <label>Ciudad</label>
           <input
             type="text"
@@ -143,20 +165,37 @@ const CheckoutModal = ({ onClose }) => {
             }
             value={searchCity || formData.ciudad}
             onChange={(e) => {
-              setSearchCity(e.target.value);
-              setFormData({ ...formData, ciudad: e.target.value });
+              const value = e.target.value;
+              setSearchCity(value);
+              setFormData({ ...formData, ciudad: value });
             }}
-            list="ciudades-list"
+            onFocus={() => setShowCities(true)}   // ✅ abre al enfocar
+            onClick={() => setShowCities(true)}   // ✅ abre al clic
+            onBlur={() => setTimeout(() => setShowCities(false), 150)}
             required
             disabled={!formData.departamento}
           />
-          <datalist id="ciudades-list">
-            {ciudades
-              .filter((c) => c.toLowerCase().includes(searchCity.toLowerCase()))
-              .map((c, idx) => (
-                <option key={idx} value={c} />
-              ))}
-          </datalist>
+
+          {showCities && formData.departamento && (
+            <ul className="custom-list">
+              {ciudades
+                .filter((c) =>
+                  c.toLowerCase().includes(searchCity.toLowerCase())
+                )
+                .map((c, idx) => (
+                  <li
+                    key={idx}
+                    onClick={() => {
+                      setFormData({ ...formData, ciudad: c });
+                      setSearchCity(c);
+                      setShowCities(false);
+                    }}
+                  >
+                    {c}
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
 
         <div className="form-group">
