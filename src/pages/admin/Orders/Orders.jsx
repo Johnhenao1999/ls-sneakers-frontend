@@ -52,8 +52,51 @@ const Orders = () => {
   };
 
   // Función para abrir WhatsApp con el cliente
-  const handleWhatsApp = (telefono, nombre) => {
-    const mensaje = `Hola ${nombre}, te saludamos desde LSneakers 👟. Queremos confirmarte el estado de tu pedido.`;
+  // ✅ Mensaje profesional con datos del pedido y previsualización
+  const handleWhatsApp = (telefono, nombre, order) => {
+    const productos = order?.productos || [];
+    const primerProducto = productos[0];
+
+    const nombreProducto = primerProducto?.nombre || "tu pedido";
+    const talla = primerProducto?.talla || "No especificada";
+    const imagen = primerProducto?.imagen || "";
+    const total = order?.total?.toLocaleString("es-CO") || "0";
+    const formaPago = order?.cliente?.formaPago || "No especificada";
+
+    const listaProductos = productos
+      .map(
+        (p, i) =>
+          `  ${i + 1}. ${p.nombre} - Talla ${p.talla} - $${p.precio.toLocaleString(
+            "es-CO"
+          )}`
+      )
+      .join("\n");
+
+    // 🧾 Mensaje con la imagen en la primera línea (preview en WhatsApp)
+    const mensaje = `
+${imagen}
+
+Hola *${nombre}*, 👋  
+
+Te saludamos desde *LSneakers 👟*.  
+Queremos confirmarte que hemos recibido correctamente tu orden.  
+
+🧾 *Detalle del pedido:*  
+${listaProductos}
+
+💵 *Total:* $${total} COP  
+💳 *Forma de pago:* ${formaPago}  
+
+💰 *Métodos de pago:*  
+- Nequi: 3162372548  
+- Daviplata: 3162372548  
+- Bancolombia (Ahorros): 848-000052-79  
+👤 A nombre de *Luisa Solarte*
+
+Por favor envíanos el comprobante por este mismo medio para proceder con la preparación de tu pedido 📦  
+¡Gracias por confiar en *LSneakers*! 🙌  
+`;
+
     window.open(
       `https://wa.me/57${telefono}?text=${encodeURIComponent(mensaje)}`,
       "_blank"
@@ -138,11 +181,20 @@ const Orders = () => {
                       onClick={() =>
                         handleWhatsApp(
                           order.cliente.celular,
-                          order.cliente.nombre
+                          order.cliente.nombre,
+                          order // 👈 importante pasar toda la orden
                         )
                       }
                     >
-                      💬
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="white"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 .5C5.65.5.5 5.65.5 12c0 2.09.55 4.05 1.51 5.77L.5 23.5l5.93-1.54A11.45 11.45 0 0 0 12 23.5c6.35 0 11.5-5.15 11.5-11.5S18.35.5 12 .5zm6.22 16.45c-.27.76-1.61 1.46-2.25 1.55-.58.09-1.29.13-2.09-.13-.48-.16-1.1-.36-1.89-.7-3.32-1.43-5.47-4.77-5.64-5-.16-.23-1.34-1.79-1.34-3.43 0-1.63.83-2.43 1.12-2.76.29-.34.63-.43.84-.43.21 0 .42 0 .6.01.19.01.45-.07.7.54.27.63.9 2.19.98 2.35.08.16.13.34.03.55-.09.21-.13.34-.27.53-.13.18-.29.41-.41.55-.13.14-.27.3-.12.58.14.29.63 1.03 1.35 1.68.93.83 1.71 1.1 2 .12.25-.79.48-1.02.88-1.16.41-.13.66-.07 1.12.35.45.42 1.57 1.32 1.84 1.56.27.23.45.35.52.54.06.19.06 1.11-.21 1.87z" />
+                      </svg>
                     </button>
                   </td>
                 </tr>
