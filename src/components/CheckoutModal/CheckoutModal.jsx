@@ -68,9 +68,8 @@ const handleSubmit = async (e) => {
 
   return (
     <>
-      <div className="modal-overlay" onClick={onClose}></div>
       <div className="checkout-modal">
-        <div className="modal-header">
+        <div className="modal-header-checkout">
           <h2>Finalizar compra</h2>
           <button className="close-btn" onClick={onClose}>
             ✖

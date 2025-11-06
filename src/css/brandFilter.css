@@ -1,9 +1,8 @@
 .filter-container {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: 10px;
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
 }
 
 .filter-container select {
@@ -31,7 +30,12 @@
 }
 
 .filter-label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #222;
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+}
+
+.filter-select-wrapper {
+  display: flex;
+  align-items: center;
 }
