@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "../css/descriptionProduct.css";
 import { useCart } from "../context/CartContext";
@@ -13,25 +13,29 @@ function DescriptionProduct() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [isLoadingContext, setIsLoadingContext] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // ⏳ Esperar a que el contexto termine de cargar (ya sea desde caché o backend)
+  const sliderRef = useRef(null);
+
+  // 🧭 Detectar si está en mobile
   useEffect(() => {
-    if (products.length > 0) {
-      setIsLoadingContext(false);
-    }
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ⏳ Cargar productos del contexto
+  useEffect(() => {
+    if (products.length > 0) setIsLoadingContext(false);
   }, [products]);
 
+  // 🔍 Buscar producto por slug o fetch
   useEffect(() => {
-    // Si aún está cargando el contexto, no hacer nada
     if (isLoadingContext) return;
-
     const found = products.find((p) => p.slug === productName);
-
-    if (found) {
-      setProduct(found);
-    } else {
-      // Solo hacer fetch si realmente no está en el contexto
-      const fetchProductBySlug = async () => {
+    if (found) setProduct(found);
+    else {
+      (async () => {
         try {
           const res = await fetch(`https://ls-sneakers-backend.vercel.app/api/product/${productName}`);
           const data = await res.json();
@@ -39,12 +43,11 @@ function DescriptionProduct() {
         } catch (error) {
           console.error("Error al obtener el producto:", error);
         }
-      };
-      fetchProductBySlug();
+      })();
     }
   }, [isLoadingContext, products, productName]);
 
-  // 🎯 Inicializar talla e imagen
+  // Inicializar talla e imagen
   useEffect(() => {
     if (product) {
       setSelectedSize(product.sizes?.[0] || null);
@@ -64,16 +67,31 @@ function DescriptionProduct() {
       alert("Por favor selecciona una talla antes de agregar al carrito.");
       return;
     }
-
     addToCart({
       ...product,
       size: selectedSize,
       imageSelected: selectedImage,
       quantity: 1,
     });
-
     setIsCartOpen(true);
   };
+
+  // 📱 Slider scroll con sincronización automática
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider || !product) return;
+
+    const handleScroll = () => {
+      const index = Math.round(slider.scrollLeft / slider.clientWidth);
+      const newImg = product.imageUrls[index];
+      if (newImg && newImg !== selectedImage) {
+        setSelectedImage(newImg);
+      }
+    };
+
+    slider.addEventListener("scroll", handleScroll);
+    return () => slider.removeEventListener("scroll", handleScroll);
+  }, [product, selectedImage]);
 
   if (isLoadingContext) return <p className="loading-product">Cargando productos...</p>;
   if (!product) return <p className="loading-product">Producto no encontrado</p>;
@@ -81,8 +99,29 @@ function DescriptionProduct() {
   return (
     <div className="description-product">
       <div className="product-details">
+        {/* === Imagen principal / slider === */}
         <div className="product-image">
-          <img src={selectedImage} alt={product.name} className="main-image" />
+          {isMobile ? (
+            <div className="mobile-slider" ref={sliderRef}>
+              {product.imageUrls?.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Vista ${index + 1}`}
+                  className={`slider-image ${selectedImage === img ? "fade-in-active" : ""}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <img
+              src={selectedImage}
+              alt={product.name}
+              className="main-image fade-in-active"
+              key={selectedImage}
+            />
+          )}
+
+          {/* Thumbnails sincronizados */}
           <div className="image-thumbnails">
             {product.imageUrls?.map((img, index) => (
               <img
@@ -90,12 +129,21 @@ function DescriptionProduct() {
                 src={img}
                 alt={`Vista ${index + 1}`}
                 className={`thumbnail ${selectedImage === img ? "active" : ""}`}
-                onClick={() => setSelectedImage(img)}
+                onClick={() => {
+                  setSelectedImage(img);
+                  if (sliderRef.current && isMobile) {
+                    sliderRef.current.scrollTo({
+                      left: index * sliderRef.current.clientWidth,
+                      behavior: "smooth",
+                    });
+                  }
+                }}
               />
             ))}
           </div>
         </div>
 
+        {/* === Info del producto === */}
         <div className="product-info">
           <h1>{product.name}</h1>
           <p>{product.branch} | {product.gender}</p>
@@ -104,11 +152,7 @@ function DescriptionProduct() {
             {product.onSale && product.discountPrice && (
               <p className="product-discount-price">{formatPrice(product.discountPrice)}</p>
             )}
-            <p
-              className={`product-price ${
-                product.onSale ? "price-strikethrough" : ""
-              }`}
-            >
+            <p className={`product-price ${product.onSale ? "price-strikethrough" : ""}`}>
               {formatPrice(product.price)}
             </p>
           </div>
@@ -119,9 +163,7 @@ function DescriptionProduct() {
               {product.sizes?.map((size) => (
                 <button
                   key={size}
-                  className={`size-button ${
-                    selectedSize === size ? "selected" : ""
-                  }`}
+                  className={`size-button ${selectedSize === size ? "selected" : ""}`}
                   onClick={() => setSelectedSize(size)}
                 >
                   {size}
