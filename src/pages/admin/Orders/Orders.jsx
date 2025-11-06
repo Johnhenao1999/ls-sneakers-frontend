@@ -56,30 +56,26 @@ const Orders = () => {
   const handleWhatsApp = (telefono, nombre, order) => {
     const productos = order?.productos || [];
     const primerProducto = productos[0];
-
-    const nombreProducto = primerProducto?.nombre || "tu pedido";
-    const talla = primerProducto?.talla || "No especificada";
-    const imagen = primerProducto?.imagen || "";
     const total = order?.total?.toLocaleString("es-CO") || "0";
     const formaPago = order?.cliente?.formaPago || "No especificada";
 
+    // 🛍️ Lista con nombre, talla y enlace de imagen
     const listaProductos = productos
       .map(
-        (p, i) =>
-          `  ${i + 1}. ${p.nombre} - Talla ${p.talla} - $${p.precio.toLocaleString(
-            "es-CO"
-          )}`
+        (p, i) => `
+${i + 1}. *${p.nombre}*  
+   👟 Talla: ${p.talla}  
+   💰 Precio: $${p.precio.toLocaleString("es-CO")}  
+   🖼 Imagen: ${p.imagen}`
       )
-      .join("\n");
+      .join("\n\n");
 
-    // 🧾 Mensaje con la imagen en la primera línea (preview en WhatsApp)
+    // 🧾 Mensaje con la primera imagen en preview
     const mensaje = `
-${imagen}
 
 Hola *${nombre}*, 👋  
-
 Te saludamos desde *LSneakers 👟*.  
-Queremos confirmarte que hemos recibido correctamente tu orden.  
+Queremos confirmarte que hemos recibido correctamente tu pedido.  
 
 🧾 *Detalle del pedido:*  
 ${listaProductos}
@@ -102,6 +98,7 @@ Por favor envíanos el comprobante por este mismo medio para proceder con la pre
       "_blank"
     );
   };
+
 
   return (
     <>
