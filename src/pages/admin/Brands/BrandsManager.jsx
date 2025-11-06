@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./brandsManager.css";
+import { useBrands } from "../../../BrandsContext"; // 👈 importa el contexto
 
 const BrandsManager = () => {
   const [brands, setBrands] = useState([]);
@@ -8,8 +9,10 @@ const BrandsManager = () => {
   const [newBrand, setNewBrand] = useState("");
   const [message, setMessage] = useState("");
 
+  const { fetchBrands } = useBrands(); // 👈 lo obtenemos del contexto
+
   // 🔄 Cargar marcas
-  const fetchBrands = async () => {
+  const loadBrands = async () => {
     try {
       setLoading(true);
       const res = await fetch("https://ls-sneakers-backend.vercel.app/api/brands");
@@ -23,12 +26,12 @@ const BrandsManager = () => {
   };
 
   useEffect(() => {
-    fetchBrands();
+    loadBrands();
   }, []);
 
   // ➕ Crear marca
   const handleAddBrand = async (e) => {
-    e.preventDefault(); // ✅ evita recargar la página
+    e.preventDefault();
 
     if (!newBrand.trim()) {
       setMessage("Por favor ingresa un nombre válido.");
@@ -49,11 +52,12 @@ const BrandsManager = () => {
         return;
       }
 
-      // ✅ Marca creada correctamente
       setMessage("✅ Marca agregada correctamente");
       setNewBrand("");
       setShowModal(false);
-      fetchBrands();
+
+      await loadBrands(); // 🔄 actualiza la vista del admin
+      await fetchBrands(true); // 🧹 limpia la cache y actualiza el contexto global
     } catch (error) {
       console.error("Error al agregar marca:", error);
       setMessage("❌ Error de servidor");
@@ -72,6 +76,8 @@ const BrandsManager = () => {
       if (!res.ok) throw new Error("Error al eliminar");
 
       setBrands((prev) => prev.filter((b) => b._id !== id));
+
+      await fetchBrands(true); // 🧹 limpia la cache global
     } catch (error) {
       console.error("Error al eliminar marca:", error);
     }
@@ -114,7 +120,7 @@ const BrandsManager = () => {
         <div className="modal-overlay-brand" onClick={() => setShowModal(false)}>
           <div
             className="modal-content-brand"
-            onClick={(e) => e.stopPropagation()} // evita cerrar al hacer click dentro
+            onClick={(e) => e.stopPropagation()}
           >
             <h2>Agregar Nueva Marca</h2>
             <form onSubmit={handleAddBrand}>

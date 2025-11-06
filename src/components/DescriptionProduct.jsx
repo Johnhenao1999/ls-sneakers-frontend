@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../css/descriptionProduct.css";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../ProductsContext";
+import FAQAccordion from "./Accordion/FAQAccordion";
 
 function DescriptionProduct() {
   const { productName } = useParams();
@@ -179,6 +180,8 @@ function DescriptionProduct() {
           </div>
         </div>
       </div>
+      {/* === FAQ Accordion === */}
+      <FAQAccordion />
     </div>
   );
 }
