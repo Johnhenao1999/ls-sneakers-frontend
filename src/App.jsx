@@ -30,8 +30,8 @@ function App() {
     <AuthProvider> {/* 👈 Ahora el contexto está disponible */}
       <CartProvider>
         <ProductsProvider>
-          <BrandsProvider>
-            <Router>
+          <Router>
+            <BrandsProvider>
               <Routes>
                 {/* 🏠 Rutas públicas */}
                 <Route path="/" element={<HomePage />} />
@@ -94,9 +94,9 @@ function App() {
                   <Route path="/admin/brands" element={<BrandsManager />} />
                 </Route>
               </Routes>
-            </Router>
-            <Analytics />
-          </BrandsProvider>
+            </BrandsProvider>
+          </Router>
+          <Analytics />
         </ProductsProvider>
       </CartProvider>
     </AuthProvider>

@@ -18,8 +18,19 @@ export async function loadBrands() {
 export const sizesByGender = {
   Hombre: ['40 EUR - H', '41 EUR - H', '42 EUR - H', '43 EUR - H', '44 EUR - H'],
   Mujer: ['36 EUR - M', '37 EUR - M', '38 EUR - M', '39 EUR - M'],
-  Unisex: [],
   Niños: ['28 EUR - N', '29 EUR - N', '30 EUR - N', '31 EUR - N', '32 EUR - N', '33 EUR - N', '34 EUR - N', '35 EUR - N'],
+  Unisex: [],
+  Guayos: [], // 👈 se inicializa vacío
 };
+
+// Combina tallas
 sizesByGender.Unisex = [...sizesByGender.Hombre, ...sizesByGender.Mujer];
+
+// 👇 “Guayos” muestra TODAS las tallas (Hombre + Mujer + Niños)
+sizesByGender.Guayos = [
+  ...sizesByGender.Hombre,
+  ...sizesByGender.Mujer,
+  ...sizesByGender.Niños,
+];
+
 export const genders = ['Hombre', 'Mujer', 'Guayos', 'Niños', 'Unisex'];

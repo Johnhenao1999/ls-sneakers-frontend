@@ -10,14 +10,13 @@ import { useProducts } from '../ProductsContext';
 function HomePage() {
   const { products } = useProducts(); // Obtener los productos desde el contexto
 
-  // Filtrar productos en promoción y asegurarnos de que discountPrice es un número
   const promotionProducts = products
-    .filter(product => product.onSale && product.discountPrice) // Solo los que tienen descuento
+    .filter(product => product.onSale && product.discountPrice)
     .map(product => ({
       ...product,
-      discountPrice: Number(product.discountPrice) // Convertir discountPrice a número
+      discountPrice: Number(product.discountPrice)
     }))
-    .sort((a, b) => a.discountPrice - b.discountPrice); // Ordenar por menor precio
+    .sort((a, b) => a.discountPrice - b.discountPrice);
 
   return (
     <div className="app-container">
@@ -25,7 +24,7 @@ function HomePage() {
       <BannerHero />
       <div>
         <h1 className='title-principal'>Nuestros productos</h1>
-        <ProductsGrid category={["Hombre", "Unisex", "Mujer", "Niños"]} maxItems={8} />
+        <ProductsGrid category={["Hombre", "Unisex", "Mujer", "Niños", "Guayos"]} maxItems={8} />
       </div>
       
       {promotionProducts.length > 0 && (

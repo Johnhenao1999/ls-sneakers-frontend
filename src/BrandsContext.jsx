@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const BrandsContext = createContext(null);
 
@@ -6,8 +7,9 @@ export const BrandsProvider = ({ children }) => {
   const [brands, setBrands] = useState([]);
   const [loadingBrands, setLoadingBrands] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
-  // 🔄 Cargar las marcas desde el backend solo una vez
+  // 🔄 Cargar las marcas desde el backend
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
@@ -27,10 +29,13 @@ export const BrandsProvider = ({ children }) => {
     }
   };
 
-  // 🚀 Carga inicial al montar
+  // 🚀 Solo carga marcas en rutas /admin
   useEffect(() => {
-    fetchBrands();
-  }, []);
+    const isAdminRoute = location.pathname.startsWith("/admin");
+    if (isAdminRoute) {
+      fetchBrands();
+    }
+  }, [location.pathname]);
 
   return (
     <BrandsContext.Provider value={{ brands, loadingBrands, error, fetchBrands }}>
@@ -39,5 +44,5 @@ export const BrandsProvider = ({ children }) => {
   );
 };
 
-// 🔹 Hook personalizado para usar el contexto fácilmente
+// 🔹 Hook personalizado
 export const useBrands = () => useContext(BrandsContext);
