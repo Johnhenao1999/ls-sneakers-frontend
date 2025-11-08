@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import HomePage from "./pages/Home";
 import ProductsGentlemen from "./pages/ProductsGentlemen";
 import PageDescriptionProduct from "./pages/PageDescriptionProduct";
@@ -21,13 +21,28 @@ import BrandsManager from "./pages/admin/Brands/BrandsManager";
 
 // 🔒 Rutas protegidas
 const PrivateRoute = () => {
-  const { user } = useAuth(); // o token, según cómo lo manejes en AuthContext
+  const { user } = useAuth();
   return user ? <Outlet /> : <Navigate to="/login" />;
+};
+
+const ConditionalAnalytics = () => {
+  const location = useLocation();
+  const { pathname } = location;
+
+  // rutas a excluir
+  const isExcluded =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/add-product") ||
+    pathname.startsWith("/update-product") ||
+    pathname.startsWith("/login");
+
+  if (isExcluded) return null;
+  return <Analytics />;
 };
 
 function App() {
   return (
-    <AuthProvider> {/* 👈 Ahora el contexto está disponible */}
+    <AuthProvider>
       <CartProvider>
         <ProductsProvider>
           <Router>
@@ -94,9 +109,11 @@ function App() {
                   <Route path="/admin/brands" element={<BrandsManager />} />
                 </Route>
               </Routes>
+
+              {/* 📊 Analytics solo en rutas públicas */}
+              <ConditionalAnalytics />
             </BrandsProvider>
           </Router>
-          <Analytics />
         </ProductsProvider>
       </CartProvider>
     </AuthProvider>
