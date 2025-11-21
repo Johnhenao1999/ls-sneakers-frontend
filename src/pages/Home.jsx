@@ -22,15 +22,14 @@ function HomePage() {
     <div className="app-container">
       <Header />
       <BannerHero />
-      <div>
+      {/* <div>
         <h1 className='title-principal'>Nuestros productos</h1>
         <ProductsGrid category={["Hombre", "Unisex", "Mujer", "Niños", "Guayos"]} maxItems={8} />
-      </div>
-      
+      </div> */}
       {promotionProducts.length > 0 && (
         <div>
           <h1 className='title-principal'>Promociones destacadas</h1>
-          <ProductsGrid customProducts={promotionProducts.slice(0, 4)} />
+          <ProductsGrid customProducts={promotionProducts} />
         </div>
       )}
       
