@@ -23,13 +23,25 @@ function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProduct
   if (loading) return <Loader text="Cargando productos..." />;
 
   // 🔎 Filtrado base
-  const filteredProducts = (customProducts || products.filter(product =>
-    (category === "promotion" ? product.onSale === true : product.onSale !== true) &&
-    (category === "promotion" ||
-      (Array.isArray(category)
-        ? category.includes(product.gender)
-        : product.gender === category))
-  )).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+const filteredProducts = customProducts
+  ? customProducts
+  : products.filter(product => {
+      
+      // 👉 Caso especial: categoría "promotion"
+      if (category === "promotion") {
+        return product.onSale === true;
+      }
+
+      // 👉 Si category es array (ej: ["Hombre", "Unisex"])
+      if (Array.isArray(category)) {
+        return category.includes(product.gender);
+      }
+
+      // 👉 Caso normal: una sola categoría (Hombre, Mujer, etc.)
+      return product.gender === category;
+      
+    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
 
   // 💡 Filtro por marca
   const finalProducts = selectedBrand
