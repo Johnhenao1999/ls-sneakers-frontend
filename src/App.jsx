@@ -18,6 +18,7 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { BrandsProvider } from "./BrandsContext";
 import BrandsManager from "./pages/admin/Brands/BrandsManager";
+import Settings from "./pages/admin/Settings/Settings";
 
 // 🔒 Rutas protegidas
 const PrivateRoute = () => {
@@ -107,6 +108,7 @@ function App() {
                   <Route path="/admin/orders" element={<Orders />} />
                   <Route path="/update-product/:id" element={<PageEditProduct />} />
                   <Route path="/admin/brands" element={<BrandsManager />} />
+                  <Route path="/admin/settings" element={<Settings />} />
                 </Route>
               </Routes>
 

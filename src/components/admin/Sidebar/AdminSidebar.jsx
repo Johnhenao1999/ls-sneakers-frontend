@@ -9,6 +9,7 @@ import {
   LogOut,
   Menu,
   X,
+  Settings,
 } from "lucide-react";
 
 const AdminSidebar = () => {
@@ -98,6 +99,17 @@ const AdminSidebar = () => {
           >
             <ShoppingBag size={20} />
             {isOpen && <span>Órdenes</span>}
+          </Link>
+
+          <Link
+            to="/admin/settings"
+            className={`sidebar-link ${
+              location.pathname === "/admin/settings" ? "active" : ""
+            }`}
+            onClick={() => isMobile && toggleSidebar()}
+          >
+            <Settings size={20} />
+            {isOpen && <span>Ajustes</span>}
           </Link>
 
           <button className="sidebar-link logout" onClick={handleLogout}>
