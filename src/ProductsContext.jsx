@@ -36,13 +36,17 @@ const clearProductsCache = () => {
 
 const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // 🔄 Obtener productos desde backend o caché
   const fetchProducts = async () => {
     try {
+      setLoading(true);
+      
       const cachedProducts = getCachedProducts();
       if (cachedProducts) {
         setProducts(cachedProducts);
+        setLoading(false);
         return;
       }
 
@@ -56,6 +60,8 @@ const ProductsProvider = ({ children }) => {
       saveProductsToCache(data);
     } catch (error) {
       console.error("❌ Error al obtener productos:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,6 +113,7 @@ const ProductsProvider = ({ children }) => {
     <ProductsContext.Provider
       value={{
         products,
+        loading,
         fetchProducts,
         addProduct,
         updateProduct,

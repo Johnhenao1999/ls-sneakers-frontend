@@ -6,21 +6,14 @@ import Loader from '../components/Loader';
 import '../css/productsGrid.css';
 
 function ProductsGrid({ category = 'all', selectedBrand, maxItems, customProducts }) {
-  const { products } = useProducts();
-  const [loading, setLoading] = useState(true);
+  const { products, loading } = useProducts();
 
   // ⚙️ Configuración de paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // ✅ número de productos por página
 
-  // 🔄 Detectar carga de productos
-  useEffect(() => {
-    if (products && products.length > 0) {
-      setLoading(false);
-    }
-  }, [products]);
-
-  if (loading) return <Loader text="Cargando productos..." />;
+  // Si customProducts viene definido, no necesitamos esperar el loading del contexto
+  if (loading && !customProducts) return <Loader text="Cargando productos..." />;
 
   // 🔎 Filtrado base
 const filteredProducts = customProducts
